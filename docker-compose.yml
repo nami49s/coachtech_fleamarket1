@@ -13,7 +13,7 @@ services:
         build: ./docker/php
         volumes:
             - ./src:/var/www/
-
+            
     mysql:
         image: mysql:8.0
         environment:
