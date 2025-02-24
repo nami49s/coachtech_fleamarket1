@@ -15,7 +15,6 @@
     <main>
         <div class="login-container">
         <h2>ログイン</h2>
-    
         <form class="form-container" action="{{ route('login.post') }}" method="POST">
             @csrf
             <div>

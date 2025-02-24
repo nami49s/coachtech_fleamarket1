@@ -46,7 +46,6 @@ main {
     flex-direction: column;
 }
 
-/* ラベル */
 .form-container label {
     text-align: left;
     font-weight: bold;

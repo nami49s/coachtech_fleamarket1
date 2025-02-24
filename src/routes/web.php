@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\UpdateController;
+use App\Http\Controllers\MypageController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,16 +30,21 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
-Route::get('/top', function () {
+Route::get('/', [TopController::class, 'index'])->name('top')->middleware('auth');
+
+Route::get('/', function () {
     return view('top');
 })->name('top')->middleware('auth');
-
-Route::get('/profile', function () {
-    return view('profile');
-})->name('profile');
 
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/mypage', function () {
+        return view('mypage');
+    })->name('mypage');
+
+    Route::get('/mypage', [MypageController::class, 'show'])->name('mypage');
+    Route::get('/mypage/profile', [UpdateController::class, 'show'])->name('mypage.profile');
+    Route::post('/mypage/profile', [UpdateController::class, 'update'])->name('mypage.update');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

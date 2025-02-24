@@ -32,12 +32,11 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout(); // ログアウト処理
+        Auth::logout();
 
-        // セッションを無効化し、CSRFトークンを再生成
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login'); // ログイン画面へリダイレクト
+        return redirect()->route('login');
     }
 }

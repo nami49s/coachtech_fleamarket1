@@ -19,7 +19,7 @@
             @csrf
                 <button type="submit">ログアウト</button>
         </form>
-        <a href="" class="profile-link">マイページ</a>
+        <a href="{{ route('mypage') }}" class="profile-link">マイページ</a>
         <a href="" class="create-listing-link">出品</a>
     </header>
 </body>

@@ -23,10 +23,12 @@ class RegisterController extends Controller
 
         if ($user) {
             Log::info('User Created:', ['user' => $user]);
+            auth()->login($user);
+
+            return redirect()->route('mypage.profile')->with('success', '登録が完了しました');
         } else {
             Log::error('Failed to create user');
+            return back()->with('error', 'ユーザーの作成に失敗しました');
         }
-
-        return redirect()->route('profile')->with('success', '登録が完了しました！');
     }
 }
