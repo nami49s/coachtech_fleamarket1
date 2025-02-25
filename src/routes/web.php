@@ -6,6 +6,8 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UpdateController;
 use App\Http\Controllers\MypageController;
+use App\Http\Controllers\TopController;
+use App\Http\Controllers\ExhibitionController;
 
 
 /*
@@ -32,10 +34,6 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
 Route::get('/', [TopController::class, 'index'])->name('top')->middleware('auth');
 
-Route::get('/', function () {
-    return view('top');
-})->name('top')->middleware('auth');
-
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::middleware(['auth'])->group(function () {
@@ -48,3 +46,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/mypage/profile', [UpdateController::class, 'update'])->name('mypage.update');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+Route::get('/sell', [ExhibitionController::class, 'create'])->name('sell');

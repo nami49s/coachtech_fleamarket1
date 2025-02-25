@@ -1,0 +1,22 @@
+.tabs {
+    display: flex;
+    justify-content: flex-start;
+    border-bottom: 2px solid #000;
+    padding: 40px 0 0 200px;
+    }
+
+.tab-link {
+    text-decoration: none;
+    padding: 10px;
+    font-size: 24px;
+    color: black;
+    font-weight: bold;
+}
+
+.tab-link-right {
+    margin-left: 60px;
+}
+
+.tab-link:hover {
+    color: #FF0000;
+}

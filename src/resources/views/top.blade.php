@@ -20,7 +20,19 @@
                 <button type="submit">ログアウト</button>
         </form>
         <a href="{{ route('mypage') }}" class="profile-link">マイページ</a>
-        <a href="" class="create-listing-link">出品</a>
+        <a href="{{ route('sell') }}" class="create-listing-link">出品</a>
     </header>
+    <main>
+        <div class="tabs">
+            <a href="{{ route('top', ['tab' => 'recommended']) }}" class="tab-link {{ $tab === 'recommended' ? 'active' : '' }}">おすすめ</a>
+            <a href="{{ route('top', ['tab' => 'mylist']) }}" class="tab-link tab-link-right {{ $tab === 'mylist' ? 'active' : '' }}">マイリスト</a>
+        </div>
+        <div class="tab-content">
+            @if ($tab === 'recommended')
+                <p>おすすめの内容</p>
+            @elseif ($tab === 'mylist')
+                <p>マイリストの内容</p>
+            @endif
+    </main>
 </body>
 </html>

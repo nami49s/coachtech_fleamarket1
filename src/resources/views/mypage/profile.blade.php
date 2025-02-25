@@ -19,8 +19,8 @@
             @csrf
                 <button type="submit">ログアウト</button>
         </form>
-        <a href="" class="profile-link">マイページ</a>
-        <a href="" class="create-listing-link">出品</a>
+        <a href="{{ route('mypage') }}" class="profile-link">マイページ</a>
+        <a href="{{ route('sell') }}" class="create-listing-link">出品</a>
     </header>
     <main>
         @if(session('success'))
@@ -43,18 +43,30 @@
                 <div>
                     <label for="name">ユーザー名</label>
                     <input type="text" name="name" value="{{ $profile->name ?? '' }}" />
+                    @error('name')
+                        <p style="color: red;">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label for="postal_code">郵便番号</label>
-                    <input type="number" name="postal_code" value="{{ $profile->postal_code ?? '' }}" />
+                    <input type="text" name="postal_code" value="{{ $profile->postal_code ?? '' }}" />
+                    @error('postal_code')
+                        <p style="color: red;">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label for="address">住所</label>
                     <input type="text" name="address" value="{{ $profile->address ?? '' }}" />
+                    @error('address')
+                        <p style="color: red;">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div>
                     <label for="building">建物名</label>
                     <input type="text" name="building" value="{{ $profile->building ?? '' }}" />
+                    @error('building')
+                        <p style="color: red;">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <button type="submit">更新する</button>

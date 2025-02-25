@@ -20,7 +20,7 @@
                 <button type="submit">ログアウト</button>
         </form>
         <a href="{{ route('mypage') }}" class="profile-link">マイページ</a>
-        <a href="" class="create-listing-link">出品</a>
+        <a href="{{ route('sell') }}" class="create-listing-link">出品</a>
     </header>
     <main>
         @if(session('success'))
@@ -38,6 +38,12 @@
                 <p></p>
             @endif
         </div>
+        <div class="tabs">
+            <a href="" class="tab-link">出品した商品</a>
+            <a href="" class="tab-link tab-link-right">購入した品</a>
+        </div>
+            <div class="tab-content">
+            </div>
     </main>
 </body>
 </html>
