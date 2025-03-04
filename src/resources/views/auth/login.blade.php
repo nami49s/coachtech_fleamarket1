@@ -27,6 +27,9 @@
             <div>
                 <label for="password">パスワード</label>
                 <input type="password" name="password" value="" />
+                @error('password')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
             </div>
 
             <button type="submit">ログインする</button>

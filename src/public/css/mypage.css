@@ -51,7 +51,7 @@ main {
 .tabs {
     display: flex;
     justify-content: flex-start;
-    border-bottom: 2px solid #000;
+    border-bottom: 2px solid #000000;
     padding: 40px 0 0 200px;
     width: 100%;
 }
@@ -69,5 +69,47 @@ main {
 }
 
 .tab-link:hover {
+    color: #FF0000;
+}
+
+.tab-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: flex-start;
+    margin: 40px 0 40px 100px;
+    width: 100%;
+}
+
+.item-card {
+    width: 300px;
+    text-align: center;
+    padding: 10px;
+}
+
+.item-card img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.item-card a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.item-name {
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+body[data-tab="selling"] .tab-link:first-child {
+    color: #FF0000;
+}
+
+body[data-tab="purchased"] .tab-link:nth-child(2) {
     color: #FF0000;
 }

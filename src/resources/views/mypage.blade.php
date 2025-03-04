@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/common.css') }}" >
     <link rel="stylesheet" href="{{ asset('css/mypage.css') }}" >
 </head>
-<body>
+<body data-tab="{{ $tab }}">
     <header class="header">
         <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
         <form action="{{ route('search') }}" method="GET" class="logout-form">
@@ -39,11 +39,38 @@
             @endif
         </div>
         <div class="tabs">
-            <a href="" class="tab-link">出品した商品</a>
-            <a href="" class="tab-link tab-link-right">購入した品</a>
+            <a href="{{ route('mypage', ['tab' => 'selling']) }}" class="tab-link {{ $tab === 'selling' ? 'active' : '' }}">出品した商品</a>
+            <a href="{{ route('mypage', ['tab' => 'purchased']) }}" class="tab-link tab-link-right" id="purchased-tab">購入した品</a>
         </div>
-            <div class="tab-content">
-            </div>
+        <div class="tab-content">
+            @if ($tab === 'selling')
+                @if ($sellingItems->isEmpty())
+                    <p>出品した商品はありません。</p>
+                @else
+                    @foreach($sellingItems as $item)
+                        <div class="item-card">
+                            <a href="{{ route('item.detail', ['item' => $item->id]) }}">
+                                <img src="{{ asset('storage/' . $item->item_image) }}" width="100" alt="{{ $item->name }}">
+                                <p class="item-name">{{ $item->name }}</p>
+                            </a>
+                        </div>
+                    @endforeach
+                @endif
+            @elseif ($tab === 'purchased')
+                @if ($purchasedItems->isEmpty())
+                    <p>購入した商品はありません。</p>
+                @else
+                    @foreach($purchasedItems as $item)
+                        <div class="item-card">
+                            <a href="{{ route('item.detail', ['item_id' => $item->id]) }}">
+                                <img src="{{ asset('storage/' . $item->item_image) }}" width="100" alt="{{ $item->name }}">
+                                <p class="item-name">{{ $item->name }}</p>
+                            </a>
+                        </div>
+                    @endforeach
+                @endif
+            @endif
+        </div>
     </main>
 </body>
 </html>

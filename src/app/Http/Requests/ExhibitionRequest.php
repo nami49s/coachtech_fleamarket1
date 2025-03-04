@@ -45,6 +45,7 @@ class ExhibitionRequest extends FormRequest
             'name.required' => '商品名を入力してください',
             'description.required' => '商品の説明を入力してください',
             'description.max' => '商品の説明は255文字以内で入力してください',
+            'price.required' => '販売価格を入力してください',
             'price.integer' => '販売価格は半角数字で入力してください',
         ];
     }

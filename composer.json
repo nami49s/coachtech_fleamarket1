@@ -4,5 +4,10 @@
     },
     "require-dev": {
         "laravel-lang/lang": "~7.0"
+    },
+    "config": {
+        "platform": {
+            "php": "8.1.31"
+        }
     }
 }

@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" >
     <link rel="stylesheet" href="{{ asset('css/common.css') }}" >
     <link rel="stylesheet" href="{{ asset('css/register.css') }}" >
+<style>
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 4px;
+    }
+</style>
 </head>
 <body>
     <header class="header">
@@ -21,28 +28,28 @@
                     <label for="name">ユーザー名</label>
                     <input type="text" name="name" value="{{ old('name') }}" />
                     @error('name')
-                        <p style="color: red;">{{ $message }}</p>
+                        <div class="error-message">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label for="email">メールアドレス</label>
                     <input type="email" name="email" value="{{ old('email') }}" />
                     @error('email')
-                        <p style="color: red;">{{ $message }}</p>
+                        <div class="error-message">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label for="password">パスワード</label>
                     <input type="password" name="password" value="{{ old('password') }}" />
                     @error('password')
-                        <p style="color: red;">{{ $message }}</p>
+                        <div class="error-message">{{ $message }}</div>
                     @enderror
                 </div>
                 <div>
                     <label for="password_confirmation">確認用パスワード</label>
                     <input type="password" name="password_confirmation" value="{{ old('password_confirmation') }}" />
                     @error('password_confirmation')
-                        <p style="color: red;">{{ $message }}</p>
+                        <div class="error-message">{{ $message }}</div>
                     @enderror
                 </div>
 

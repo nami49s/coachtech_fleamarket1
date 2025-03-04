@@ -1,0 +1,148 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.sell-container h2 {
+    font-size: 35px;
+    color: #000000;
+    text-align: center;
+    width: 100%;
+}
+
+.sell-container h3 {
+    border-bottom: 1px solid #555555;
+    color: #555555;
+    font-size: 27px;
+    font-weight: bold;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.form-container label {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 10px;
+}
+
+.form-container select {
+    width: 100%;
+    padding: 10px;
+}
+
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+}
+
+.form-container p {
+    border: 2px solid #f76868;
+    border-radius: 8px;
+    padding: 10px 25px;
+    font-weight: bold;
+}
+
+#image-preview-container {
+    margin-top: 10px;
+}
+
+.drop-area {
+    width: 700px;
+    height: 150px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+#image-preview {
+    max-width: 100%;
+    max-height: 100%;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+}
+
+.drop-area p {
+    margin: 0;
+    color: #f76868;
+    font-size: 14px;
+    transition: opacity 0.3s;
+}
+
+.category-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.category-radio {
+    display: none;
+}
+
+.category-label {
+    display: inline-block;
+    padding: 5px 20px;
+    font-weight: lighter !important;
+    font-size: 15px !important;
+    border: 2px solid #f76868;
+    border-radius: 30px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #f76868;
+    margin: 10px 0;
+}
+
+.category-label:hover {
+    background-color: #fff;
+}
+
+.category-radio:checked+.category-label {
+    background-color: #f76868;
+    color: white;
+    border-color: #f76868;
+}
+.form-container button {
+    margin: 100px 0;
+    padding: 10px 30px;
+    color: #fff;
+    background-color: #f76868;
+    border-radius: 5px;
+    border: 1px solid #f76868;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#price::placeholder {
+    color: #000000;
+    font-weight: bold;
+    font-size: 20px;
+    opacity: 1;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}

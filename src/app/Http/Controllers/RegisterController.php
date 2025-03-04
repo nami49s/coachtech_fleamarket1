@@ -31,4 +31,8 @@ class RegisterController extends Controller
             return back()->with('error', 'ユーザーの作成に失敗しました');
         }
     }
+    public function showRegisterForm()
+    {
+        return view('auth.register');
+    }
 }

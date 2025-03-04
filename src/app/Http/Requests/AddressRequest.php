@@ -25,7 +25,7 @@ class AddressRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'postal_code' => 'required|regex:/^\d{3}-\d{4}$/',
+            'postal_code' => 'required|regex:/^\\d{3}-\\d{4}$/',
             'address' => 'required',
             'building' => 'nullable'
         ];
