@@ -35,9 +35,13 @@
 
         <div class="item-info">
             <h2>{{ $item->name }}</h2>
-            <p>{{ $item->brand }}</p>
+            <p class="brand">{{ $item->brand }}</p>
 
-            <p><strong>価格:</strong> ¥{{ number_format($item->price) }}(税込)</p>
+            <p>
+                <span class="price-symbol">¥</span>
+                <span class="price-value">{{ number_format($item->price) }}</span>
+                <span class="price-tax">(税込)</span>
+            </p>
             @if (auth()->check())
                 <form action="{{ route('items.like', ['item' => $item->id]) }}" method="POST">
                     @csrf
@@ -54,12 +58,38 @@
                 <p><a href="{{ route('login') }}">ログイン</a>すると「いいね」できます</p>
             @endif
 
+            <form action="" method="GET">
+                <button type="submit" class="purchase-button">購入手続きへ</button>
+            </form>
+
             <h3>商品説明</h3>
-            <p>{{ $item->description }}</p>
+            <p class="description">{{ $item->description }}</p>
 
             <h3>商品の情報</h3>
-            <p><strong>カテゴリー</strong> {{ $item->category->name }}</p>
-            <p><strong>商品の状態</strong> {{ $item->condition }}</p>
+            <p><strong class="category">カテゴリー</strong><span class="category-content">{{ $item->category->name }}</span></p>
+            <p><strong class="condition">商品の状態</strong> {{ $item->condition }}</p>
+
+            <h3>コメント</h3>
+                @foreach($item->comments as $comment)
+                    <div class="comment">
+                        <div class="comment-header">
+                            <img src="{{ asset('storage/' . $comment->user->profile->profile_image) }}" alt="プロフィール画像" class="profile-image">
+                            <p><span class="name">{{ $comment->user->name }}</span></span></p>
+                        </div>
+                        <p class="comment-view">{{ $comment->comment }}</p>
+                    </div>
+                @endforeach
+
+            @if(auth()->check())
+                <form action="{{ route('comments.store', $item) }}" method="POST">
+                    @csrf
+                    <p class="comment-title">商品へのコメント</p>
+                    <textarea name="comment" required placeholder="コメントを入力"></textarea>
+                    <button class="comment-button" type="submit">コメントを送信する</button>
+                </form>
+            @else
+                <p><a href="{{ route('login') }}">ログイン</a>するとコメントできます</p>
+            @endif
 
             <a href="{{ route('mypage') }}" class="mypage-btn">マイページ</a>
             <a href="{{ route('top') }}" class="top-btn">商品一覧</a>

@@ -9,6 +9,7 @@ use App\Http\Controllers\MypageController;
 use App\Http\Controllers\TopController;
 use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CommentController;
 
 
 /*
@@ -50,6 +51,7 @@ Route::middleware(['auth'])->group(function () {
     // 商品詳細
     Route::get('/item/{item}', [ExhibitionController::class, 'show'])->name('item.detail');
     Route::post('/items/{item}/like', [ItemController::class, 'like'])->name('items.like');
+    Route::post('/items/{item}/comments', [CommentController::class, 'store'])->name('comments.store');
 
     // ログアウト
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

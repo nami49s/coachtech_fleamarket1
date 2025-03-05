@@ -2,15 +2,14 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    max-width: 100%;
-    margin: 30px 20px;
-    gap: 50px;
+    max-width: 90%;
+    margin: 20px 40px;
 }
 
 .item-image {
     flex: 1;
-    max-width: 40%;
-    margin: 50px 40px;
+    max-width: 45%;
+    margin: 60px 60px;
 }
 
 .item-image img {
@@ -23,24 +22,28 @@
 .item-info {
     flex: 1;
     max-width: 50%;
+    margin-left: 40px;
+    font-size: 30px;
 }
 
 .like-button {
     border: none;
     background: none;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 50px;
+    font-weight: bold;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    color:rgb(57, 57, 62)
+    color:rgb(57, 57, 62);
 }
 
 .like-count {
-    font-size: 12px;
+    font-size: 20px;
     color: rgb(57, 57, 62);
     margin-top: 2px;
+    font-weight: bold;
 }
 
 .like-button:hover {
@@ -49,4 +52,123 @@
 
 .item-info h2 {
     font-size: 50px;
+    margin-top: 50px;
+    margin-bottom: 5px;
+}
+
+strong {
+    font-size: 25px;
+}
+
+.brand {
+    font-size: 20px;
+    margin-top: 5px;
+}
+
+.price-symbol,
+.price-tax {
+    font-size: 30px;
+    vertical-align: middle;
+}
+
+.price-value {
+    font-size: 40px;
+}
+
+.purchase-button {
+    background-color: #eb5252;
+    border: 2px solid #eb5252;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 100%;
+    font-size: 30px;
+}
+
+.purchase-button:hover {
+    text-decoration: none;
+    background-color: #FF0000;
+    border:2px solid #FF0000;
+}
+
+p {
+    font-size: 20px;
+}
+
+.description {
+    font-size: 25px;
+}
+
+.category,
+.condition {
+    margin-right: 50px;
+}
+
+.category-content {
+    background-color: rgb(208, 205, 205);
+    color: #000000;
+    border-radius: 30px;
+    border: 2px solid rgb(208,205,205);
+    padding: 5px 20px;
+}
+
+.comment {
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.profile-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 60%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.comment-view {
+    font-size: 20px;
+    background-color: #ebeaea;
+    padding: 20px 10px;
+    border-radius: 5px;
+}
+
+.name {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.comment-text {
+    font-size: 16px;
+    color: #333;
+}
+
+.comment-button {
+    background-color: #eb5252;
+    border: 2px solid #eb5252;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 100%;
+    font-size: 25px;
+    padding: 10px 10px;
+}
+
+.comment-title {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    height: 250px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    margin-bottom: 30px;
 }
