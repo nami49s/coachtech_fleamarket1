@@ -42,23 +42,28 @@
                 <span class="price-value">{{ number_format($item->price) }}</span>
                 <span class="price-tax">(税込)</span>
             </p>
-            @if (auth()->check())
-                <form action="{{ route('items.like', ['item' => $item->id]) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="like-button">
-                        @if ($item->likes()->where('user_id', auth()->id())->exists())
-                            ★
-                        @else
-                            ☆
-                        @endif
-                        <span class="like-count">{{ $item->likes()->count() }}</span>
-                    </button>
-                </form>
-            @else
-                <p><a href="{{ route('login') }}">ログイン</a>すると「いいね」できます</p>
-            @endif
+            <div class="like-comment-container">
+                @if (auth()->check())
+                    <form action="{{ route('items.like', ['item' => $item->id]) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="like-button">
+                            @if ($item->likes()->where('user_id', auth()->id())->exists())
+                                ❤️
+                            @else
+                                🤍
+                            @endif
+                            <span class="like-count">{{ $item->likes()->count() }}</span>
+                        </button>
+                    </form>
+                @else
+                    <p><a href="{{ route('login') }}">ログイン</a>すると「いいね」できます</p>
+                @endif
+                <p class="comment-icon">💬
+                    <span class="comment-icon-count">{{ $item->comments()->count() }}</span>
+                </p>
+            </div>
 
-            <form action="" method="GET">
+            <form action="{{ route('purchase.show', ['item' => $item->id]) }}" method="GET">
                 <button type="submit" class="purchase-button">購入手続きへ</button>
             </form>
 
@@ -69,7 +74,7 @@
             <p><strong class="category">カテゴリー</strong><span class="category-content">{{ $item->category->name }}</span></p>
             <p><strong class="condition">商品の状態</strong> {{ $item->condition }}</p>
 
-            <h3>コメント</h3>
+            <h3 class="comment-count">コメント ({{ $item->comments->count() }})</h3>
                 @foreach($item->comments as $comment)
                     <div class="comment">
                         <div class="comment-header">

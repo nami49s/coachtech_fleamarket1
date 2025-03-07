@@ -10,6 +10,7 @@ use App\Http\Controllers\TopController;
 use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PurchaseController;
 
 
 /*
@@ -36,6 +37,8 @@ Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 // 検索
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
+Route::get('/item/{item}', [ExhibitionController::class, 'show'])->name('item.detail');
+
 // 認証が必要なルート
 Route::middleware(['auth'])->group(function () {
     // マイページ
@@ -49,9 +52,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/mypage/selling-items', [ExhibitionController::class, 'sellingItems'])->name('mypage.selling-items');
 
     // 商品詳細
-    Route::get('/item/{item}', [ExhibitionController::class, 'show'])->name('item.detail');
     Route::post('/items/{item}/like', [ItemController::class, 'like'])->name('items.like');
     Route::post('/items/{item}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+    //商品購入
+    Route::get('/purchase/{item}', [PurchaseController::class, 'show'])->name('purchase.show');
+    Route::get('/edit_address', [PurchaseController::class, 'editAddress'])->name('edit_address');
+    Route::post('/update_address', [PurchaseController::class, 'updateAddress'])->name('update_address');
 
     // ログアウト
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
