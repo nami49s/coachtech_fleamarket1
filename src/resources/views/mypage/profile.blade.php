@@ -10,7 +10,9 @@
 </head>
 <body>
     <header class="header">
-        <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
+        <a class="img" href="{{ url('/') }}">
+            <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
+        </a>
         <form action="{{ route('search') }}" method="GET" class="logout-form">
             <input type="text" name="query" placeholder="何をお探しですか？" value="{{ request()->get('query') }}">
             <button type="submit"></button>

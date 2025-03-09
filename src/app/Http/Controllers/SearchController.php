@@ -8,26 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class SearchController extends Controller
 {
-    public function top(Request $request)
-    {
-        $tab = $request->query('tab', 'recommended');
-        $query = $request->query('query', '');
-
-        $items = collect();
-
-        if ($tab === 'recommended'){
-            if (!empty($query)) {
-            $items = Item::where('name', 'LIKE', "%{$query}%")
-                        ->orWhere('description', 'LIKE', "%{$query}%")
-                        ->where('user_id', '!=', Auth::id())
-                        ->get();
-            } else {
-                $items = Item::where('user_id', '!=', Auth::id())->get();
-            }
-        }
-
-        return view('top', compact('tab', 'query', 'items'));
-    }
 
     public function search(Request $request)
     {

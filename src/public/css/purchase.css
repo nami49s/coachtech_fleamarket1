@@ -1,11 +1,12 @@
 .purchase-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-start;
     width: 100%;
     max-width: 90%;
     margin: 7% auto;
     gap: 20px;
+    position: relative;
 }
 
 .left-content {
@@ -127,6 +128,9 @@
 
 .confirm-container {
     width: 35%;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .payment-summary {

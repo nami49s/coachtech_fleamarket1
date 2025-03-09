@@ -13,21 +13,33 @@ class TopController extends Controller
         $user = Auth::user();
         $profile = $user ? $user->profile : null;
         $tab = $request->query('tab', 'recommended');
+        $query = $request->query('query');
+
+        $items = collect();
+
 
         if ($tab === 'recommended') {
+            $itemQuery = Item::query();
             if ($user) {
-                $items = Item::where('user_id', '!=', $user->id)->get();
-            } else {
-                $items = Item::all(); // 未ログイン時は全商品を取得
+                $itemQuery->where('user_id', '!=', $user->id);
             }
+            if (!empty($query)) {
+                $itemQuery->where(function ($q) use ($query) {
+                    $q->where('name', 'LIKE', "%{$query}%")
+                        ->orWhere('description', 'LIKE', "%{$query}%");
+                });
+            }
+            $items = $itemQuery->get();
+        } elseif ($tab === 'mylist' && $user) {
+            $items = $user->likedItems()
+            ->where(function ($q) use ($query) {
+                if (!empty($query)) {
+                    $q->where('name', 'LIKE', "%{$query}%")
+                        ->orWhere('description', 'LIKE', "%{$query}%");
+                }
+            })
+            ->get();
         }
-        elseif ($tab === 'mylist') {
-            $items = collect();
+            return view('top', compact('profile', 'tab', 'query', 'items'));
         }
-        else {
-            $items = collect();
-        }
-
-        return view('top', compact('profile', 'tab', 'items'));
     }
-}

@@ -10,7 +10,9 @@
 </head>
 <body data-tab="{{ $tab }}">
     <header class="header">
-        <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
+        <a class="img" href="{{ url('/') }}">
+            <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
+        </a>
         <form action="{{ route('search') }}" method="GET" class="logout-form">
             <input type="text" name="query" placeholder="何をお探しですか？" value="{{ request()->get('query') }}">
             <button type="submit"></button>
@@ -52,6 +54,9 @@
                             <a href="{{ route('item.detail', ['item' => $item->id]) }}">
                                 <img src="{{ asset('storage/' . $item->item_image) }}" width="100" alt="{{ $item->name }}">
                                 <p class="item-name">{{ $item->name }}</p>
+                                @if ($item->is_sold)
+                                    <span class="sold-label">SOLD</span>
+                                @endif
                             </a>
                         </div>
                     @endforeach
@@ -62,9 +67,12 @@
                 @else
                     @foreach($purchasedItems as $item)
                         <div class="item-card">
-                            <a href="{{ route('item.detail', ['item_id' => $item->id]) }}">
+                            <a href="{{ route('item.detail', ['item' => $item->id]) }}">
                                 <img src="{{ asset('storage/' . $item->item_image) }}" width="100" alt="{{ $item->name }}">
                                 <p class="item-name">{{ $item->name }}</p>
+                                @if ($item->is_sold)
+                                    <span class="sold-label">SOLD</span>
+                                @endif
                             </a>
                         </div>
                     @endforeach

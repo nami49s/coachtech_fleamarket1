@@ -10,7 +10,9 @@
 </head>
 <body>
     <header class="header">
-        <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
+        <a class="img" href="{{ url('/') }}">
+            <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
+        </a>
         <form action="{{ route('search') }}" method="GET" class="logout-form">
             <input type="text" name="query" placeholder="何をお探しですか？" value="{{ request()->get('query') }}">
             <button type="submit"></button>
@@ -34,13 +36,13 @@
                 @csrf
 
                 <label for="postal_code">郵便番号</label>
-                <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', $profile->postal_code ?? '') }}" required>
+                <input type="text" name="postal_code" id="postal_code" value="{{ old('postal_code', session('shipping_postal_code', $profile->postal_code ?? '')) }}" required>
 
                 <label for="address">住所</label>
-                <input type="text" name="address" id="address" value="{{ old('address', $profile->address ?? '') }}" required>
+                <input type="text" name="address" id="address" value="{{ old('address', session('shipping_address', $profile->address ?? '')) }}" required>
 
                 <label for="building">建物名</label>
-                <input type="text" name="building" id="building" value="{{ old('building', $profile->building ?? '') }}">
+                <input type="text" name="building" id="building" value="{{ old('building', session('shipping_building', $profile->building ?? '')) }}">
 
                 <button type="submit" class="save-button">変更を保存</button>
             </form>

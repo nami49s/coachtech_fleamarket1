@@ -22,7 +22,7 @@ class MypageController extends Controller
         $sellingItems = $user->items ?? collect(); // リレーションが未定義でもエラーを防ぐ
 
         // 購入した商品（purchases() リレーションがある前提だが、テーブルがなくてもエラー回避）
-        $purchasedItems = method_exists($user, 'purchases') ? $user->purchases : collect();
+        $purchasedItems = $user->purchases()->with('item')->get()->pluck('item');
 
         return view('mypage', compact('profile', 'tab', 'sellingItems', 'purchasedItems'));
     }

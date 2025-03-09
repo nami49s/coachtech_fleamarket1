@@ -10,7 +10,10 @@
 </head>
 <body>
     <header class="header">
-        <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
+        <a class="img" href="{{ url('/') }}">
+            <img src="{{ asset('images/logo.svg') }}"
+        alt="coachtech">
+        </a>
         <form action="{{ route('search') }}" method="GET" class="logout-form">
             <input type="text" name="query" placeholder="何をお探しですか？" value="{{ request()->get('query') }}">
             <button type="submit"></button>
@@ -42,7 +45,7 @@
                 </div>
             </div>
 
-            <form class="payment-form" action="" method="POST">
+            <form class="payment-form" action="{{ route('purchase.store', ['item' => $item->id]) }}" method="POST">
                 @csrf
                 <div class="payment-select">
                     <label for="payment_method">支払い方法</label>
@@ -56,39 +59,42 @@
                 <div class="shipping-info">
                     <h3>配送先</h3>
                     <a  class="update" href="{{ route('edit_address') }}" class="edit-button">変更する</a>
-                    @if ($profile)
-                        <p class="postal-code">〒 {{ $profile->postal_code }}</p>
-                        <p class="address">{{ $profile->address }}</p>
-                        <p class="building">{{ $profile->building ?? '' }}</p>
+
+                    @php
+                        $postal_code = session('shipping_postal_code') ?? ($profile->postal_code ?? '');
+                        $address = session('shipping_address') ?? ($profile->address ?? '');
+                        $building = session('shipping_building') ?? ($profile->building ?? '');
+                    @endphp
+                    @if ($postal_code && $address)
+                        <p class="postal-code">〒 {{ $postal_code }}</p>
+                        <p class="address">{{ $address }}</p>
+                        <p class="building">{{ $building }}</p>
                     @else
                         <p>配送先情報が登録されていません。</p>
                     @endif
                 </div>
+                <div class="confirm-container">
+                    <div class="payment-summary">
+                        <table>
+                            <tr>
+                                <td>商品代金</td>
+                                <td><span>¥{{ number_format($item->price) }}</span></td>
+                            </tr>
+                            <tr>
+                                <td>支払い方法</td>
+                                <td><span id="payment-method"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button type="submit" class="confirm-button">購入する</button>
+                </div>
             </form>
         </div>
-
-
-        <div class="confirm-container">
-            <div class="payment-summary">
-                <table>
-                    <tr>
-                        <td>商品代金</td>
-                        <td><span>¥{{ number_format($item->price) }}</span></td>
-                    </tr>
-                    <tr>
-                        <td>支払い方法</td>
-                        <td><span id="selected-payment-method"></span></td>
-                    </tr>
-                </table>
-            </div>
-            <button type="submit" class="confirm-button">購入する</button>
-        </div>
-    </main>
 
     <script>
         document.getElementById('payment_method').addEventListener('change', function() {
             let paymentText = this.options[this.selectedIndex].text;
-            document.getElementById('selected-payment-method').textContent = paymentText;
+            document.getElementById('payment-method').textContent = paymentText;
         });
     </script>
 </html>

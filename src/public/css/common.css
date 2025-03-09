@@ -6,7 +6,7 @@
     padding: 10px 20px;
 }
 
-.header img {
+.img {
     margin: 10px 20px;
     width: 30%;
 }
@@ -64,4 +64,13 @@ form button:hover {
 .profile-link:hover,
 .create-listing-link:hover {
     text-decoration: underline;
+}
+
+.sold-label {
+    display: inline-block;
+    background: red;
+    color: white;
+    padding: 5px;
+    font-weight: bold;
+    border-radius: 5px;
 }
