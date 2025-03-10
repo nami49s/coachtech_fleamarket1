@@ -89,3 +89,20 @@ main {
     text-decoration: underline;
 }
 
+@media screen and (max-width: 850px) {
+    .register-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .form-container input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .form-container button {
+        font-size: 14px;
+        padding: 8px;
+        margin-top: 40px;
+    }
+}

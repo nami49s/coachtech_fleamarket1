@@ -197,3 +197,57 @@ textarea {
 .comment-count {
     color: #838080;
 }
+
+@media screen and (max-width: 850px) {
+    .item-detail {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: 100%;
+        margin: 10px;
+    }
+
+    .item-image {
+        max-width: 90%;
+        margin: 20px auto;
+    }
+
+    .item-info {
+        max-width: 90%;
+        margin: 0 auto;
+        font-size: 24px;
+    }
+
+    .like-comment-container {
+        flex-direction: row;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .like-button,
+    .comment-icon {
+        font-size: 40px;
+    }
+
+    .comment-icon-count,
+    .like-count {
+        font-size: 16px;
+    }
+
+    .purchase-button {
+        font-size: 24px;
+    }
+
+    .comment-button {
+        font-size: 20px;
+    }
+
+    .comment-title {
+        font-size: 25px;
+    }
+
+    textarea {
+        height: 200px;
+        font-size: 14px;
+    }
+}

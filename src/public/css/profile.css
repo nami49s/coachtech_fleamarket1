@@ -104,3 +104,42 @@ label.file-label {
     margin-bottom: 60px;
     margin-right: 50px;
 }
+
+@media screen and (max-width: 850px) {
+    main {
+        justify-content: flex-start;
+        margin-top: 10px;
+    }
+
+    .profile-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .form-container input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .form-container button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    label.file-label {
+        font-size: 13px;
+        padding: 5px 10px;
+    }
+
+    .profile-image-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #preview-image {
+        width: 120px;
+        height: 120px;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+}

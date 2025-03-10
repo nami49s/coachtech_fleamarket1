@@ -32,7 +32,8 @@ main {
     background: white;
     padding: 30px;
     border-radius: 8px;
-    width: 650px;
+    width: 100%;
+    max-width: 650px;
     text-align: center;
 }
 
@@ -93,4 +94,25 @@ main {
     color: red;
     font-size: 14px;
     margin-top: 5px;
+}
+
+@media screen and (max-width: 850px) {
+    .login-container {
+        max-width: 450px;
+        /* 少し狭くする */
+        padding: 25px;
+    }
+
+    .form-container input {
+        font-size: 14px;
+        /* 小さめに */
+        padding: 8px;
+    }
+
+    .form-container button {
+        font-size: 15px;
+        padding: 10px;
+        margin-top: 40px;
+        /* 余白を調整 */
+    }
 }
