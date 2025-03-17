@@ -198,6 +198,16 @@ textarea {
     color: #838080;
 }
 
+.sold-label {
+    background-color: blueviolet;
+    border: 2px solid blueviolet;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 100%;
+    font-size: 30px;
+    text-align: center;
+}
+
 @media screen and (max-width: 850px) {
     .item-detail {
         flex-direction: column;
@@ -249,5 +259,9 @@ textarea {
     textarea {
         height: 200px;
         font-size: 14px;
+    }
+
+    .sold-label {
+        font-size: 24px;
     }
 }

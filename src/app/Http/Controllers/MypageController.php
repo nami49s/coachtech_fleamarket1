@@ -15,13 +15,10 @@ class MypageController extends Controller
         $user = Auth::user();
         $profile = $user ? $user->profile : null;
 
-        // URLの `tab` パラメータを取得（デフォルトは 'selling'）
         $tab = $request->query('tab', 'selling');
 
-        // 出品した商品（User モデルが items() リレーションを持っている場合）
-        $sellingItems = $user->items ?? collect(); // リレーションが未定義でもエラーを防ぐ
+        $sellingItems = $user->items ?? collect();
 
-        // 購入した商品（purchases() リレーションがある前提だが、テーブルがなくてもエラー回避）
         $purchasedItems = $user->purchases()->with('item')->get()->pluck('item');
 
         return view('mypage', compact('profile', 'tab', 'sellingItems', 'purchasedItems'));

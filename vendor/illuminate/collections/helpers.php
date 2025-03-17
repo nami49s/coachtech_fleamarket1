@@ -7,13 +7,10 @@ if (! function_exists('collect')) {
     /**
      * Create a collection from the given value.
      *
-     * @template TKey of array-key
-     * @template TValue
-     *
-     * @param  \Illuminate\Contracts\Support\Arrayable<TKey, TValue>|iterable<TKey, TValue>|null  $value
-     * @return \Illuminate\Support\Collection<TKey, TValue>
+     * @param  mixed  $value
+     * @return \Illuminate\Support\Collection
      */
-    function collect($value = [])
+    function collect($value = null)
     {
         return new Collection($value);
     }
@@ -61,7 +58,7 @@ if (! function_exists('data_get')) {
             if ($segment === '*') {
                 if ($target instanceof Collection) {
                     $target = $target->all();
-                } elseif (! is_iterable($target)) {
+                } elseif (! is_array($target)) {
                     return value($default);
                 }
 
@@ -73,15 +70,6 @@ if (! function_exists('data_get')) {
 
                 return in_array('*', $key) ? Arr::collapse($result) : $result;
             }
-
-            $segment = match ($segment) {
-                '\*' => '*',
-                '\{first}' => '{first}',
-                '{first}' => array_key_first(is_array($target) ? $target : (new Collection($target))->all()),
-                '\{last}' => '{last}',
-                '{last}' => array_key_last(is_array($target) ? $target : (new Collection($target))->all()),
-                default => $segment,
-            };
 
             if (Arr::accessible($target) && Arr::exists($target, $segment)) {
                 $target = $target[$segment];
@@ -158,42 +146,6 @@ if (! function_exists('data_set')) {
     }
 }
 
-if (! function_exists('data_forget')) {
-    /**
-     * Remove / unset an item from an array or object using "dot" notation.
-     *
-     * @param  mixed  $target
-     * @param  string|array|int|null  $key
-     * @return mixed
-     */
-    function data_forget(&$target, $key)
-    {
-        $segments = is_array($key) ? $key : explode('.', $key);
-
-        if (($segment = array_shift($segments)) === '*' && Arr::accessible($target)) {
-            if ($segments) {
-                foreach ($target as &$inner) {
-                    data_forget($inner, $segments);
-                }
-            }
-        } elseif (Arr::accessible($target)) {
-            if ($segments && Arr::exists($target, $segment)) {
-                data_forget($target[$segment], $segments);
-            } else {
-                Arr::forget($target, $segment);
-            }
-        } elseif (is_object($target)) {
-            if ($segments && isset($target->{$segment})) {
-                data_forget($target->{$segment}, $segments);
-            } elseif (isset($target->{$segment})) {
-                unset($target->{$segment});
-            }
-        }
-
-        return $target;
-    }
-}
-
 if (! function_exists('head')) {
     /**
      * Get the first element of an array. Useful for method chaining.
@@ -224,36 +176,11 @@ if (! function_exists('value')) {
     /**
      * Return the default value of the given value.
      *
-     * @template TValue
-     * @template TArgs
-     *
-     * @param  TValue|\Closure(TArgs): TValue  $value
-     * @param  TArgs  ...$args
-     * @return TValue
+     * @param  mixed  $value
+     * @return mixed
      */
     function value($value, ...$args)
     {
         return $value instanceof Closure ? $value(...$args) : $value;
-    }
-}
-
-if (! function_exists('when')) {
-    /**
-     * Return a value if the given condition is true.
-     *
-     * @param  mixed  $condition
-     * @param  \Closure|mixed  $value
-     * @param  \Closure|mixed  $default
-     * @return mixed
-     */
-    function when($condition, $value, $default = null)
-    {
-        $condition = $condition instanceof Closure ? $condition() : $condition;
-
-        if ($condition) {
-            return value($value, $condition);
-        }
-
-        return value($default, $condition);
     }
 }

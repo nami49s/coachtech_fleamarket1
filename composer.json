@@ -1,13 +1,30 @@
 {
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
     "require": {
-        "laravel/fortify": "^1.25"
+        "php": "^7.3|^8.0",
+        "fruitcake/laravel-cors": "^2.0",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "laravel/fortify": "^1.19",
+        "laravel/framework": "^8.75",
+        "laravel/sanctum": "^2.11",
+        "laravel/tinker": "^2.5",
+        "laravel/ui": "^3.3"
     },
     "require-dev": {
         "laravel-lang/lang": "~7.0"
     },
     "config": {
-        "platform": {
-            "php": "8.1.31"
-        }
+    },
+    "require": {
+        "illuminate/support": "^8.0",
+        "illuminate/console": "^8.0",
+        "illuminate/filesystem": "^8.0",
+        "illuminate/validation": "^8.0",
+        "laravel/fortify": "^1.7",
+        "laravel/ui": "^3.3"
     }
 }

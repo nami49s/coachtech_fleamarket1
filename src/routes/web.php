@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\LoginController;
@@ -51,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/sell', [ExhibitionController::class, 'store'])->name('sell.store');
     Route::get('/mypage/selling-items', [ExhibitionController::class, 'sellingItems'])->name('mypage.selling-items');
 
+
     // 商品詳細
     Route::post('/items/{item}/like', [ItemController::class, 'like'])->name('items.like');
     Route::post('/items/{item}/comments', [CommentController::class, 'store'])->name('comments.store');
@@ -64,3 +68,5 @@ Route::middleware(['auth'])->group(function () {
     // ログアウト
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+require __DIR__.'/auth.php';

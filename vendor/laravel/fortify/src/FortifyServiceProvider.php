@@ -113,7 +113,6 @@ class FortifyServiceProvider extends ServiceProvider
     {
         $this->configurePublishing();
         $this->configureRoutes();
-        $this->registerCommands();
     }
 
     /**
@@ -137,9 +136,7 @@ class FortifyServiceProvider extends ServiceProvider
                 __DIR__.'/../stubs/UpdateUserPassword.php' => app_path('Actions/Fortify/UpdateUserPassword.php'),
             ], 'fortify-support');
 
-            $method = method_exists($this, 'publishesMigrations') ? 'publishesMigrations' : 'publishes';
-
-            $this->{$method}([
+            $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'fortify-migrations');
         }
@@ -160,18 +157,6 @@ class FortifyServiceProvider extends ServiceProvider
             ], function () {
                 $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
             });
-        }
-    }
-
-    /**
-     * Register the package's commands.
-     */
-    protected function registerCommands(): void
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Console\InstallCommand::class,
-            ]);
         }
     }
 }

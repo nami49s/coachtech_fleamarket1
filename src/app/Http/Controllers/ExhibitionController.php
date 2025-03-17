@@ -38,8 +38,7 @@ class ExhibitionController extends Controller
             $tab = $request->query('tab', 'recommended'); // デフォルトは "recommended"
 
             if ($tab === 'recommended') {
-                // 「おすすめ」タブでは全商品のみを表示（未ログインでも表示可能）
-                $items = Item::all();
+                $items = Item::with('user', 'category')->get();
             } elseif ($tab === 'mylist') {
             if (auth()->check()) {
                 // 「マイリスト」タブではログインユーザーの商品を取得
@@ -59,7 +58,7 @@ class ExhibitionController extends Controller
     public function sellingItems()
     {
         if (!auth()->check()) {
-            return response()->json([]); // 未ログイン時は空の配列を返す
+            return response()->json([]);
         }
 
         $items = Item::where('user_id', Auth::id())->get();
@@ -75,7 +74,8 @@ class ExhibitionController extends Controller
 
     public function show(Item $item)
     {
-        $likesCount = auth()->check() ? $item->likes()->count() : 0;
+        $item->load('user');
+        $likesCount = $item->likes()->count();
         return view('detail', compact('item', 'likesCount'));
     }
 }

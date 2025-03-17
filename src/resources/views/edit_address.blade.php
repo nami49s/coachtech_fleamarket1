@@ -13,7 +13,7 @@
         <a class="img" href="{{ url('/') }}">
             <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
         </a>
-        <form action="{{ route('search') }}" method="GET" class="logout-form">
+        <form action="{{ route('search') }}" method="GET" class="search-form">
             <input type="text" name="query" placeholder="何をお探しですか？" value="{{ request()->get('query') }}">
             <button type="submit"></button>
         </form>
@@ -48,3 +48,5 @@
             </form>
         </div>
     </main>
+</body>
+</html>

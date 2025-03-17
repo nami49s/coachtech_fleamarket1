@@ -13,7 +13,7 @@
         <a class="img" href="{{ url('/') }}">
             <img src="{{ asset('images/logo.svg') }}" alt="coachtech">
         </a>
-        <form action="{{ route('search') }}" method="GET" class="logout-form">
+        <form action="{{ route('search') }}" method="GET" class="search-form">
             <input type="text" name="query" placeholder="何をお探しですか？" value="{{ request()->get('query') }}">
             <button type="submit"></button>
         </form>
@@ -65,9 +65,13 @@
                 </p>
             </div>
 
-            <form action="{{ route('purchase.show', ['item' => $item->id]) }}" method="GET">
-                <button type="submit" class="purchase-button">購入手続きへ</button>
-            </form>
+            @if ($item->is_sold)
+                <span class="sold-label">SOLD</span>
+            @else
+                <form action="{{ route('purchase.show', ['item' => $item->id]) }}" method="GET">
+                    <button type="submit" class="purchase-button">購入手続きへ</button>
+                </form>
+            @endif
 
             <h3>商品説明</h3>
             <p class="description">{{ $item->description }}</p>
@@ -97,9 +101,6 @@
             @else
                 <p><a href="{{ route('login') }}">ログイン</a>するとコメントできます</p>
             @endif
-
-            <a href="{{ route('mypage') }}" class="mypage-btn">マイページ</a>
-            <a href="{{ route('top') }}" class="top-btn">商品一覧</a>
         </div>
     </main>
 </body>

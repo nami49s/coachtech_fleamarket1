@@ -14,7 +14,8 @@ class RegisterController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        \Log::info('Register Request:', $request->all());
+        \Log::info('Register Request Received:', $request->all());
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -22,12 +23,15 @@ class RegisterController extends Controller
         ]);
 
         if ($user) {
-            Log::info('User Created:', ['user' => $user]);
-            auth()->login($user);
+            Log::info('User Created Successfully:', ['user_id' => $user->id]);
 
-            return redirect()->route('mypage.profile')->with('success', '登録が完了しました');
+            event(new Registered($user));
+
+            Auth::login($user);
+
+            return redirect()->route('verification.notice')->with('success', '登録が完了しました。メールを確認してください');
         } else {
-            Log::error('Failed to create user');
+            Log::error('User Creation Failed');
             return back()->with('error', 'ユーザーの作成に失敗しました');
         }
     }

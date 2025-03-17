@@ -8,15 +8,16 @@ use App\Models\Item;
 use App\Models\Purchase;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateAddressRequest;
+use App\Http\Requests\PurchaseRequest;
 use Illuminate\Support\Facades\DB;
 
 class PurchaseController extends Controller
 {
     public function show($itemId)
     {
-        $item = Item::findOrFail($itemId);
+        $item = Item::where('id', $itemId)->first();
         $user = auth()->user();
-        $profile = $user->profile;
+        $profile = $user ? $user->profile : null;
 
         session(['item_id' => $itemId]);
 
@@ -25,6 +26,10 @@ class PurchaseController extends Controller
 
     public function editAddress()
     {
+        if (!session()->has('item_id')) {
+            return redirect()->route('mypage')->with('error', '商品情報が見つかりません');
+        }
+
         $user = auth()->user();
         $profile = $user->profile;
 
@@ -33,6 +38,8 @@ class PurchaseController extends Controller
 
     public function updateAddress(UpdateAddressRequest $request)
     {
+        \Log::info('updateAddress が呼ばれました', ['request' => $request->all()]);
+
         session([
             'shipping_postal_code' => $request->postal_code,
             'shipping_address' => $request->address,
@@ -42,8 +49,11 @@ class PurchaseController extends Controller
         $itemId = session('item_id');
 
         if (!$itemId) {
+            \Log::error('商品情報が見つかりません');
             return redirect()->route('mypage')->with('error', '商品情報が見つかりません');
         }
+
+        \Log::info('session item_id:', ['item_id' => $itemId]);
 
         return redirect()->route('purchase.show', ['item' => $itemId])->with('success', '配送先を更新しました。');
     }
