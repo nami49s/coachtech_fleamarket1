@@ -40,12 +40,11 @@ class ExhibitionController extends Controller
 
     public function index(Request $request)
     {
-        {
-            $tab = $request->query('tab', 'recommended'); // デフォルトは "recommended"
+        $tab = $request->query('tab', 'recommended'); // デフォルトは "recommended"
 
-            if ($tab === 'recommended') {
-                $items = Item::with('user', 'categories')->get();
-            } elseif ($tab === 'mylist') {
+        if ($tab === 'recommended') {
+            $items = Item::with('user', 'categories')->get();
+        } elseif ($tab === 'mylist') {
             if (auth()->check()) {
                 // 「マイリスト」タブではログインユーザーの商品を取得
                 $items = Item::where('user_id', auth()->id())->with('categories')->get();
@@ -57,8 +56,7 @@ class ExhibitionController extends Controller
             // タブが不明な場合はデフォルトの動作
             $items = collect();
         }
-            return view('top', compact('items', 'tab'));
-        }
+        return view('top', compact('items', 'tab'));
     }
 
     public function sellingItems()
