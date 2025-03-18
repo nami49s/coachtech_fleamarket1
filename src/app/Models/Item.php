@@ -21,9 +21,9 @@ class Item extends Model
         'status',
         'is_sold'
     ];
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'item_category');
     }
     public function user()
     {

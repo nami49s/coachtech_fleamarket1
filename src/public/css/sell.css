@@ -96,7 +96,7 @@ main {
     flex-wrap: wrap;
 }
 
-.category-radio {
+.category-checkbox {
     display: none;
 }
 
@@ -118,7 +118,7 @@ main {
     background-color: #fff;
 }
 
-.category-radio:checked+.category-label {
+.category-checkbox:checked+.category-label {
     background-color: #f76868;
     color: white;
     border-color: #f76868;

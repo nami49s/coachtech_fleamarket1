@@ -38,8 +38,6 @@ class PurchaseController extends Controller
 
     public function updateAddress(UpdateAddressRequest $request)
     {
-        \Log::info('updateAddress が呼ばれました', ['request' => $request->all()]);
-
         session([
             'shipping_postal_code' => $request->postal_code,
             'shipping_address' => $request->address,
@@ -60,8 +58,6 @@ class PurchaseController extends Controller
 
     public function store(Request $request, Item $item)
     {
-
-        Log::info('フォームデータ:', $request->all());
 
         if ($item->is_sold) {
             return redirect()->back()->with('error', 'この商品はすでに購入されています。');

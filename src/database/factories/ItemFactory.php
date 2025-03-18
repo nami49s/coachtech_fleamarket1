@@ -21,7 +21,6 @@ class ItemFactory extends Factory
         return [
             'user_id' => User::inRandomOrder()->value('id') ?? User::factory(), // ランダムなユーザー
             'item_image' => 'items/sample.jpg',
-            'category_id' => Category::inRandomOrder()->value('id') ?? Category::factory(),
             'condition' => $this->faker->randomElement(['新品', '未使用', '目立った傷や汚れなし', 'やや傷や汚れあり', '傷や汚れあり']), // 商品の状態
             'name' => $this->faker->word(), // 商品名
             'brand' => $this->faker->company(), // ブランド名

@@ -22,8 +22,11 @@ class ItemsTableSeeder extends Seeder
             return;
         }
 
-        Item::factory(10)->create([
-            'category_id' => $categories->random()->id // 既存のカテゴリをランダムに使用
-        ]);
+        Item::factory(10)->create()->each(function ($item) use ($categories) {
+            // 各アイテムにランダムなカテゴリーを1〜3つ関連付ける
+            $item->categories()->attach(
+                $categories->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        });
     }
 }

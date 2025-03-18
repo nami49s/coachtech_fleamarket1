@@ -53,17 +53,19 @@
                     <label>カテゴリー</label>
                     <div class="category-buttons">
                         @foreach ($categories as $category)
-                            <input type="radio" name="category_id" id="category_{{ $category->id }}"
-                                value="{{ $category->id }}" class="category-radio"
-                                {{ old('category_id') == $category->id ? 'checked' : '' }}>
-                                @error('category_id')
-                                    <div class="error-message">{{ $message }}</div>
-                                @enderror
+                        <div>
+                            <input type="checkbox" name="category_ids[]" id="category_{{ $category->id }}"
+                                value="{{ $category->id }}" class="category-checkbox"
+                                {{ is_array(old('category_ids')) && in_array($category->id, old('category_ids')) ? 'checked' : '' }}>
                             <label for="category_{{ $category->id }}" class="category-label">
                                 {{ $category->name }}
                             </label>
+                        </div>
                         @endforeach
                     </div>
+                    @error('category_id')
+                        <div class="error-message">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div>
                     <label for="condition">商品の状態</label>

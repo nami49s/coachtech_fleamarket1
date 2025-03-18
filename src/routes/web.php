@@ -14,6 +14,8 @@ use App\Http\Controllers\ExhibitionController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\StripeController;
+
 
 
 /*
@@ -42,6 +44,9 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::get('/item/{item}', [ExhibitionController::class, 'show'])->name('item.detail');
 
+Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
+Route::post('/konbini-checkout', [StripeController::class, 'konbiniCheckout'])->name('konbini.checkout');
+
 // 認証が必要なルート
 Route::middleware(['auth'])->group(function () {
     // マイページ
@@ -64,9 +69,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit_address', [PurchaseController::class, 'editAddress'])->name('edit_address');
     Route::post('/update_address', [PurchaseController::class, 'updateAddress'])->name('update_address');
     Route::post('/purchase/{item}', [PurchaseController::class, 'store'])->name('purchase.store');
-
-    // ログアウト
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/purchase/success/{item}', [StripeController::class, 'success'])->name('purchase.success');
 });
+
+// ログアウト
+Route::post('/logout', function () {
+    Auth::logout();
+    session()->flush(); // セッションの全データを削除
+    return redirect('/login')->with('success', 'ログアウトしました');
+})->name('logout');
 
 require __DIR__.'/auth.php';

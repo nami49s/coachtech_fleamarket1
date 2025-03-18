@@ -22,11 +22,17 @@ class ExhibitionController extends Controller
         $validatedExhibitionData = $request->validated();
         $validatedExhibitionData['user_id'] = auth()->id();
 
+        unset($validatedExhibitionData['category_id']);
+
         $item = Item::create($validatedExhibitionData);
 
         if ($request->hasFile('item_image')) { // フォームの `name` に合わせる
             $path = $request->file('item_image')->store('items', 'public'); // 正しい保存パス
             $item->update(['item_image' => $path]); // ここで画像を保存
+        }
+
+        if ($request->has('category_ids')) {
+            $item->categories()->attach($request->category_ids);
         }
 
         return redirect()->route('mypage')->with('success', '出品が完了しました');
@@ -38,11 +44,11 @@ class ExhibitionController extends Controller
             $tab = $request->query('tab', 'recommended'); // デフォルトは "recommended"
 
             if ($tab === 'recommended') {
-                $items = Item::with('user', 'category')->get();
+                $items = Item::with('user', 'categories')->get();
             } elseif ($tab === 'mylist') {
             if (auth()->check()) {
                 // 「マイリスト」タブではログインユーザーの商品を取得
-                $items = Item::where('user_id', auth()->id())->get();
+                $items = Item::where('user_id', auth()->id())->with('categories')->get();
             } else {
                 // 未ログインで「マイリスト」タブを開いた場合はログインページへリダイレクト
                 return redirect()->route('login')->with('error', 'ログインが必要です');
@@ -61,20 +67,21 @@ class ExhibitionController extends Controller
             return response()->json([]);
         }
 
-        $items = Item::where('user_id', Auth::id())->get();
+        $items = Item::where('user_id', Auth::id())->with('categories')->get();
 
         return response()->json($items->map(function ($item) {
             return [
                 'id' => $item->id,
                 'name' => $item->name,
                 'item_image' => $item->item_image ? url('storage/' . $item->item_image) : null,
+                'categories' => $item->categories->pluck('name'),
             ];
         }));
     }
 
     public function show(Item $item)
     {
-        $item->load('user');
+        $item->load('user', 'categories');
         $likesCount = $item->likes()->count();
         return view('detail', compact('item', 'likesCount'));
     }

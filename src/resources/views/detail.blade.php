@@ -77,7 +77,11 @@
             <p class="description">{{ $item->description }}</p>
 
             <h3>商品の情報</h3>
-            <p><strong class="category">カテゴリー</strong><span class="category-content">{{ $item->category->name }}</span></p>
+            <p><strong class="category">カテゴリー</strong>
+                @foreach ($item->categories as $category)
+                    <span class="category-content">{{ $category->name }}</span>
+                @endforeach
+            </p>
             <p><strong class="condition">商品の状態</strong> {{ $item->condition }}</p>
 
             <h3 class="comment-count">コメント ({{ $item->comments->count() }})</h3>
