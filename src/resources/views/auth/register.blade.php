@@ -7,13 +7,6 @@
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" >
     <link rel="stylesheet" href="{{ asset('css/common.css') }}" >
     <link rel="stylesheet" href="{{ asset('css/register.css') }}" >
-<style>
-    .error-message {
-        color: red;
-        font-size: 14px;
-        margin-top: 4px;
-    }
-</style>
 </head>
 <body>
     <header class="header">

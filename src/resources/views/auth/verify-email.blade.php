@@ -16,7 +16,7 @@
         <div class="container">
             <h2>メール認証が必要です</h2>
             <p>登録されたメールアドレスに認証リンクを送信しました。メール内のリンクをクリックして認証を完了してください。</p>
-            
+
             @if (session('message'))
                 <div class="alert alert-success">
                     {{ session('message') }}
@@ -27,15 +27,15 @@
                 @csrf
                 <button type="submit" class="btn btn-primary">認証メールを再送する</button>
             </form>
-            
+
             <p class="mt-3">
                 ログアウトして別のアカウントでログインする場合は
-                <a href="{{ route('logout') }}" 
+                <a href="{{ route('login') }}"
                     onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                     こちら
                 </a>。
             </p>
-            
+
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf
             </form>

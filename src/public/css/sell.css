@@ -149,43 +149,35 @@ main {
 @media screen and (max-width: 850px) {
     .sell-container {
         max-width: 600px;
-        /* 幅を狭める */
     }
 
     .drop-area {
         width: 100%;
-        /* 画像エリアをコンテナ幅に合わせる */
         height: 120px;
-        /* 少し小さくする */
     }
 
     .category-buttons {
         justify-content: center;
-        /* カテゴリ選択を中央寄せ */
     }
 
     .form-container label {
         font-size: 18px;
-        /* フォントサイズを少し小さく */
     }
 
     .form-container input,
     .form-container select,
     .form-container textarea {
         font-size: 16px;
-        /* 入力エリアの文字サイズを調整 */
         padding: 8px;
     }
 
     .form-container button {
         font-size: 20px;
-        /* ボタンのサイズ調整 */
         padding: 8px 20px;
     }
 
     .category-label {
         font-size: 14px;
-        /* カテゴリラベルのフォントを小さく */
         padding: 4px 15px;
     }
 }

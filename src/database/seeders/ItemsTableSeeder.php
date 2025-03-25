@@ -23,7 +23,7 @@ class ItemsTableSeeder extends Seeder
         }
 
         Item::factory(10)->create()->each(function ($item) use ($categories) {
-            // 各アイテムにランダムなカテゴリーを1〜3つ関連付ける
+
             $item->categories()->attach(
                 $categories->random(rand(1, 3))->pluck('id')->toArray()
             );

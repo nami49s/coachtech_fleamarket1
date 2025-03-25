@@ -26,67 +26,53 @@ class StripeController extends Controller
 
         $item = Item::findOrFail($request->item_id);
 
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
         if ($request->payment_method === 'credit-card') {
-            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
             session(['payment_method' => 'credit-card']);
-
-            // Checkoutセッションの作成
             $session = \Stripe\Checkout\Session::create([
-                'payment_method_types' => ['card'], // 支払い方法（デフォルトでカードが有効）
+                'payment_method_types' => ['card'],
                 'line_items' => [[
                     'price_data' => [
-                        'currency' => 'jpy', // 日本円
+                        'currency' => 'jpy',
                         'product_data' => [
                             'name' => $item->name,
                         ],
-                        'unit_amount' => $item->price, // 価格（1000円）
+                        'unit_amount' => $item->price,
                     ],
                     'quantity' => 1,
                 ]],
-                'mode' => 'payment', // 一回払い
-                'success_url' => route('purchase.success' , ['item' => $item->id]), // 成功時のリダイレクト先
-                'cancel_url' => route('mypage') . '?payment=cancel',   // キャンセル時のリダイレクト先
+                'mode' => 'payment',
+                'success_url' => route('purchase.success' , ['item' => $item->id]),
+                'cancel_url' => route('mypage') . '?payment=cancel',
             ]);
 
-            // Stripeの決済ページにリダイレクト
-            return response()->json(['session_id' => $session->id]);
-        }
-
-        return response()->json(['error' => '対応していない支払い方法です'], 400);
-    }
-
-    public function konbiniCheckout(Request $request)
-    {
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
-        $item = Item::findOrFail($request->item_id);
-
-        if (!auth()->check()) {
-            return response()->json(['error' => 'ログインが必要です'], 401);
-        }
-
-        session(['payment_method' => 'konbini']);
-
-        $session = \Stripe\Checkout\Session::create([
-            'payment_method_types' => ['konbini'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'jpy',
-                    'product_data' => [
-                        'name' => $item->name,
+            return redirect($session->url);
+        } elseif ($request->payment_method === 'convenience-store') {
+            session(['payment_method' => 'コンビニ払い']);
+            $session = \Stripe\Checkout\Session::create([
+                'payment_method_types' => ['konbini'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'jpy',
+                        'product_data' => [
+                            'name' => $item->name,
+                        ],
+                        'unit_amount' => $item->price,
                     ],
-                    'unit_amount' => $item->price, // 円からセン単位へ
-                ],
-                'quantity' => 1,
-            ]],
-            'mode' => 'payment',
-            'customer_email' => auth()->user()->email,
-            'success_url' => route('purchase.success', ['item' => $item->id]),
-            'cancel_url' => url()->previous(),
-        ]);
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'customer_email' => auth()->user()->email,
+                'success_url' => route('purchase.success', ['item' => $item->id]),
+                'cancel_url' => route('mypage') . '?payment=cancel',
+            ]);
 
-        return response()->json(['session_id' => $session->id]);
+            return redirect($session->url);
+        }
+
+        return redirect()->back()->with('error', '対応していない支払い方法です');
+
     }
 
     public function success(Item $item)
@@ -106,7 +92,7 @@ class StripeController extends Controller
                 'postal_code' => session('shipping_postal_code') ?? $profile->postal_code,
                 'address' => session('shipping_address') ?? $profile->address,
                 'building' => session('shipping_building') ?? $profile->building,
-                'payment_method' => $paymentMethod, // Stripeはカード決済なので固定
+                'payment_method' => $paymentMethod,
             ]);
 
             $item->update(['is_sold' => true]);

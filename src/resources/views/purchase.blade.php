@@ -47,16 +47,18 @@
             </div>
 
             <div class="payment-form">
-                @csrf
-                <input type="hidden" name="item_id" id="item_id" value="{{ $item->id }}">
-                <div class="payment-select">
-                    <label for="payment_method">支払い方法</label>
-                    <select name="payment_method" id="payment_method">
-                        <option value="" disabled selected>選択してください</option>
-                        <option value="convenience-store">コンビニ払い</option>
-                        <option value="credit-card">カード支払い</option>
-                    </select>
-                </div>
+                <form method="POST" action="{{ route('purchase.payment') }}">
+                    @csrf
+                    <input type="hidden" name="item_id" id="item_id" value="{{ $item->id }}">
+                    <div class="payment-select">
+                        <label for="payment_method">支払い方法</label>
+                        <select name="payment_method" id="payment_method" onchange="this.form.submit()">
+                            <option value="" disabled selected>選択してください</option>
+                            <option value="convenience-store" {{ session('payment_method') == 'convenience-store' ? 'selected' : '' }}>コンビニ払い</option>
+                            <option value="credit-card" {{ session('payment_method') == 'credit-card' ? 'selected' : '' }}>カード支払い</option>
+                        </select>
+                    </div>
+                </form>
 
                 <div class="shipping-info">
                     <h3>配送先</h3>
@@ -84,11 +86,17 @@
                             </tr>
                             <tr>
                                 <td>支払い方法</td>
-                                <td><span id="payment-method"></span></td>
+                                <td><span>{{ session('payment_method') == 'credit-card' ? 'カード支払い' : 'コンビニ払い' }}</span></td>
                             </tr>
                         </table>
                     </div>
-                    <button type="submit" class="confirm-button" id="checkout-button">購入する</button>
+
+                    <form method="POST" action="{{ route('checkout') }}">
+                        @csrf
+                        <input type="hidden" name="item_id" value="{{ $item->id }}">
+                        <input type="hidden" name="payment_method" id="payment_method_hidden" value="{{ session('payment_method', 'credit-card') }}">
+                        <button type="submit" class="confirm-button">購入する</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -98,60 +106,6 @@
         document.getElementById('payment_method').addEventListener('change', function() {
             let paymentText = this.options[this.selectedIndex].text;
             document.getElementById('payment-method').textContent = paymentText;
-        });
-
-        document.getElementById('checkout-button').addEventListener('click', function() {
-            let selectedMethod = document.getElementById('payment_method').value;
-            let itemId = document.getElementById('item_id').value;
-
-            if (!selectedMethod) {
-                alert('支払い方法を選択してください');
-                return;
-            }
-
-            if (selectedMethod === 'credit-card') {
-                fetch("{{ route('checkout') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({ item_id: itemId, payment_method: selectedMethod })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.session_id) {
-                        let stripe = Stripe("{{ config('services.stripe.key') }}");
-                        stripe.redirectToCheckout({ sessionId: data.session_id });
-                    } else {
-                        alert("決済に失敗しました");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-            } else if (selectedMethod === 'convenience-store') {
-                fetch("{{ route('konbini.checkout') }}", {  // 新規作成したコンビニ決済API
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                    },
-                    body: JSON.stringify({ item_id: itemId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.session_id) {
-                        let stripe = Stripe("{{ config('services.stripe.key') }}");
-                        stripe.redirectToCheckout({ sessionId: data.session_id });
-                    } else {
-                        alert("決済に失敗しました");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-            }
         });
     </script>
 </html>

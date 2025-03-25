@@ -89,6 +89,12 @@ main {
     text-decoration: underline;
 }
 
+.error-message {
+    color: red!important;
+    font-size: 14px!important;
+    margin-top: 4px;
+}
+
 @media screen and (max-width: 850px) {
     .register-container {
         width: 90%;

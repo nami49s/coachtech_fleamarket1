@@ -48,7 +48,7 @@
                 @if (auth()->check())
                     <form action="{{ route('items.like', ['item' => $item->id]) }}" method="POST">
                         @csrf
-                        <button type="submit" class="like-button">
+                        <button type="submit" class="like-button {{ $item->likes()->where('user_id', auth()->id())->exists() ? 'liked' : '' }}">
                             @if ($item->likes()->where('user_id', auth()->id())->exists())
                                 ❤️
                             @else

@@ -18,8 +18,8 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(), // ランダムなユーザーを紐づける
-            'profile_image' => 'profile_images/profile.jpg', // 仮の画像パス
+            'user_id' => User::factory(),
+            'profile_image' => 'profile_images/profile.jpg',
             'name' => $this->faker->name(),
             'postal_code' => $this->faker->postcode(),
             'address' => $this->faker->address(),

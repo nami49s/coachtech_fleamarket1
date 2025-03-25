@@ -26,9 +26,9 @@ class ExhibitionController extends Controller
 
         $item = Item::create($validatedExhibitionData);
 
-        if ($request->hasFile('item_image')) { // フォームの `name` に合わせる
-            $path = $request->file('item_image')->store('items', 'public'); // 正しい保存パス
-            $item->update(['item_image' => $path]); // ここで画像を保存
+        if ($request->hasFile('item_image')) {
+            $path = $request->file('item_image')->store('items', 'public');
+            $item->update(['item_image' => $path]);
         }
 
         if ($request->has('category_ids')) {
@@ -40,20 +40,21 @@ class ExhibitionController extends Controller
 
     public function index(Request $request)
     {
-        $tab = $request->query('tab', 'recommended'); // デフォルトは "recommended"
+        $tab = $request->query('tab', 'recommended');
 
         if ($tab === 'recommended') {
             $items = Item::with('user', 'categories')->get();
+            dd($items);
         } elseif ($tab === 'mylist') {
             if (auth()->check()) {
-                // 「マイリスト」タブではログインユーザーの商品を取得
+
                 $items = Item::where('user_id', auth()->id())->with('categories')->get();
             } else {
-                // 未ログインで「マイリスト」タブを開いた場合はログインページへリダイレクト
+
                 return redirect()->route('login')->with('error', 'ログインが必要です');
             }
         } else {
-            // タブが不明な場合はデフォルトの動作
+
             $items = collect();
         }
         return view('top', compact('items', 'tab'));

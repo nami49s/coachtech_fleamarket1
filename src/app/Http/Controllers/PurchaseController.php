@@ -11,6 +11,7 @@ use App\Http\Requests\UpdateAddressRequest;
 use App\Http\Requests\PurchaseRequest;
 use Illuminate\Support\Facades\DB;
 
+
 class PurchaseController extends Controller
 {
     public function show($itemId)
@@ -44,16 +45,9 @@ class PurchaseController extends Controller
             'shipping_building' => $request->building,
         ]);
 
-        $itemId = session('item_id');
+        $item = Item::find(session('item_id'));
 
-        if (!$itemId) {
-            \Log::error('商品情報が見つかりません');
-            return redirect()->route('mypage')->with('error', '商品情報が見つかりません');
-        }
-
-        \Log::info('session item_id:', ['item_id' => $itemId]);
-
-        return redirect()->route('purchase.show', ['item' => $itemId])->with('success', '配送先を更新しました。');
+        return redirect()->route('purchase.show', ['item' => $item->id])->with('success', '配送先を更新しました。');
     }
 
     public function store(Request $request, Item $item)
@@ -63,37 +57,53 @@ class PurchaseController extends Controller
             return redirect()->back()->with('error', 'この商品はすでに購入されています。');
         }
 
-        $profile = Auth::user()->profile;
+        $user = auth()->user();
 
-        $postal_code = session('shipping_postal_code') ?? $profile->postal_code;
-        $address = session('shipping_address') ?? $profile->address;
-        $building = session('shipping_building') ?? $profile->building;
+        // セッションから送付先情報を取得
+        $postal_code = session('shipping_postal_code');
+        $address = session('shipping_address');
+        $building = session('shipping_building');
 
-        $payment_method = $request->input('payment_method');
+        // 購入情報をデータベースに保存
+        $purchase = Purchase::create([
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'postal_code' => $postal_code,
+            'address' => $address,
+            'building' => $building,
+            'payment_method' => $request->payment_method,
+        ]);
 
-        if (!$payment_method) {
-            Log::error('支払い方法が送信されていません！');
-            return redirect()->back()->with('error', '支払い方法を選択してください。');
+        // 商品の購入済みステータスを更新
+        $item->is_sold = true;
+        $item->save();
+
+        $stripeController = new StripeController();
+        return $stripeController->checkout(new Request(['item_id' => $item->id, 'payment_method' => 'credit-card']));
     }
 
+    public function updatePaymentMethod(Request $request)
+    {
+        $request->validate([
+            'payment_method' => 'required|in:credit-card,convenience-store',
+        ]);
 
-        DB::transaction(function () use ($item, $postal_code, $address, $building, $payment_method) {
-            Purchase::create([
-                'user_id' => Auth::id(),
-                'item_id' => $item->id,
-                'postal_code' => $postal_code,
-                'address' => $address,
-                'building' => $building,
-                'payment_method' => $payment_method,
-            ]);
 
-            $item->update(['is_sold' => true]);
+        session(['payment_method' => $request->payment_method]);
 
-        });
+        $purchase = Purchase::where('user_id', auth()->id())
+            ->latest()
+            ->first();
 
-        session()->forget(['shipping_postal_code', 'shipping_address', 'shipping_building']);
+        // 支払い方法を更新
+        if ($purchase) {
+            $purchase->payment_method = $request->payment_method == 'credit-card' 
+                ? 'カード支払い' 
+                : 'コンビニ払い';
+            $purchase->save();
+        }
 
-        return redirect()->route('mypage')->with('success', '購入が完了しました！');
+        return redirect()->back();
     }
 
 }

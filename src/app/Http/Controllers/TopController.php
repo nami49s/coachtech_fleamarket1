@@ -29,7 +29,9 @@ class TopController extends Controller
                         ->orWhere('description', 'LIKE', "%{$query}%");
                 });
             }
+
             $items = $itemQuery->get();
+
         } elseif ($tab === 'mylist' && $user) {
             $items = $user->likedItems()
             ->where(function ($q) use ($query) {
@@ -40,6 +42,7 @@ class TopController extends Controller
             })
             ->get();
         }
+
             return view('top', compact('profile', 'tab', 'query', 'items'));
         }
     }

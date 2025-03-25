@@ -27,7 +27,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         $this->app->singleton(VerifyEmailViewResponse::class, CustomVerifyEmailViewResponse::class);
 
-        Fortify::ignoreRoutes(); // Fortifyのデフォルトルートを無効化
+        Fortify::ignoreRoutes();
 
         Fortify::registerView(function () {
             return view('auth.register');

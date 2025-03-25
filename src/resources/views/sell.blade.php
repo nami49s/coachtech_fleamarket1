@@ -43,7 +43,6 @@
                         @error('item_image')
                             <div class="error-message">{{ $message }}</div>
                         @enderror
-                        <!-- 画像プレビュー（最初は非表示） -->
                         <img id="image-preview" src="" alt="画像プレビュー" style="display: none;">
                         <p id="select-text">画像を選択する</p>
                     </div>

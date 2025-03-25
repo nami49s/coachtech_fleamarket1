@@ -29,7 +29,7 @@ use App\Http\Controllers\StripeController;
 |
 */
 
-Route::get('/', [TopController::class, 'index'])->name('top'); // ミドルウェア削除（未ログインでもアクセス可）
+Route::get('/', [TopController::class, 'index'])->name('top');
 
 // ユーザー登録
 Route::get('/register', [RegisterController::class, 'showRegisterForm'])->name('register');
@@ -44,8 +44,8 @@ Route::get('/search', [SearchController::class, 'search'])->name('search');
 
 Route::get('/item/{item}', [ExhibitionController::class, 'show'])->name('item.detail');
 
+Route::post('/purchase/payment', [PurchaseController::class, 'updatePaymentMethod'])->name('purchase.payment');
 Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
-Route::post('/konbini-checkout', [StripeController::class, 'konbiniCheckout'])->name('konbini.checkout');
 
 // 認証が必要なルート
 Route::middleware(['auth'])->group(function () {
@@ -75,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
 // ログアウト
 Route::post('/logout', function () {
     Auth::logout();
-    session()->flush(); // セッションの全データを削除
+    session()->flush();
     return redirect('/login')->with('success', 'ログアウトしました');
 })->name('logout');
 

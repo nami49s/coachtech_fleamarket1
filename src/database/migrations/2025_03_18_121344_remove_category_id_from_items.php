@@ -26,6 +26,6 @@ class RemoveCategoryIdFromItems extends Migration
      */
     public function down()
     {
-        
+
     }
 }
