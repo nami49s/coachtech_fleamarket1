@@ -41,7 +41,7 @@ coachtechフリマは、ユーザーが商品を出品し、購入できるフ�
 - phpMyAdmin:http://localhost:8080
 
 ## ER図
-![ER図](/images/coachtech-flea-market.png)
+![ER図](public/images/coachtech-flea-market.png)
 
 ## テストユーザー情報
 一般ユーザー:
