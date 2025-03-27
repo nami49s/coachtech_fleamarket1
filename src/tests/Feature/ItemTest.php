@@ -29,17 +29,20 @@ class ItemTest extends TestCase
     /** @test */
     public function 全商品を取得できる()
     {
-        Item::factory()->count(3)->create();
+        $user = User::factory()->create();
 
-        $response = $this->get(route('top'));
+        $items = Item::factory()->count(3)->create([
+            'user_id' => $user->id
+        ]);
+
+        $response = $this->actingAs($user)->get(route('top', ['tab' => 'recommended']));
 
         $response->assertStatus(200);
-
         $this->assertEquals(3, Item::count());
 
-        $item = Item::first();
-        $this->assertNotNull($item); // null じゃないか確認
-        $response->assertSee($item->name);
+        foreach ($items as $item) {
+            $response->assertDontSee($item->name);
+        }
     }
 
     /** @test */
@@ -64,11 +67,11 @@ class ItemTest extends TestCase
     public function 自分が出品した商品は表示されない()
     {
         $user = User::factory()->create();
+        $item = Item::factory()->create(['user_id' => $user->id]);
 
-        Item::factory()->create(['user_id' => $user->id]);
+        $otherUser = User::factory()->create();
+        $response = $this->actingAs($otherUser)->get(route('top'));
 
-        $response = $this->actingAs($user)->get(route('top'));
-
-        $response->assertDontSee($user->items->first()->name);
+        $response->assertSee($item->name);
     }
 }

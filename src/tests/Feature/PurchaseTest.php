@@ -8,7 +8,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Purchase;
-use Stripe\Checkout\Session;
+use Stripe\Checkout\Session as StripeSession;
 use Mockery;
 
 class PurchaseTest extends TestCase
@@ -21,15 +21,17 @@ class PurchaseTest extends TestCase
         $user = User::factory()->create();
         $item = Item::factory()->create(['is_sold' => false]);
 
-        $mockSession = Mockery::mock('overload:' . Session::class);
+        $mockSession = Mockery::mock('overload:' . \Stripe\Checkout\Session::class);
         $mockSession->shouldReceive('create')
             ->once()
-            ->andReturn((object)['id' => 'test_session_id']);
+            ->andReturn((object)['url' => 'https://test.stripe.com/checkout']);
 
-        $response = $this->actingAs($user)->postJson(route('purchase.store', ['item' => $item->id]));
+        $response = $this->actingAs($user)->postJson(route('purchase.store', ['item' => $item->id]), [
+            'item_id' => $item->id,
+            'payment_method' => 'credit-card'
+        ]);
 
-        $response->assertStatus(200)
-                ->assertJson(['session_id' => 'test_session_id']);
+        $response->assertRedirect('https://test.stripe.com/checkout');
     }
 
     /** @test */

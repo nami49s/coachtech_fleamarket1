@@ -48,7 +48,7 @@ class ExhibitionController extends Controller
         } elseif ($tab === 'mylist') {
             if (auth()->check()) {
 
-                $items = Item::where('user_id', auth()->id())->with('categories')->get();
+                $items = $user->likedItems()->with('categories')->get();
             } else {
 
                 return redirect()->route('login')->with('error', 'ログインが必要です');

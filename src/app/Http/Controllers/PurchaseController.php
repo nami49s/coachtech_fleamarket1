@@ -78,8 +78,7 @@ class PurchaseController extends Controller
         $item->is_sold = true;
         $item->save();
 
-        $stripeController = new StripeController();
-        return $stripeController->checkout(new Request(['item_id' => $item->id, 'payment_method' => 'credit-card']));
+        return (new StripeController())->checkout($request);
     }
 
     public function updatePaymentMethod(Request $request)

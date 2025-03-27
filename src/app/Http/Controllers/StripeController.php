@@ -25,6 +25,7 @@ class StripeController extends Controller
         ]);
 
         $item = Item::findOrFail($request->item_id);
+        $user = auth()->user();
 
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
