@@ -60,8 +60,8 @@ php artisan tinker
 - 本アプリでは Stripe を使用して決済を実装しています。
 - '.env' に以下の設定を追加してください。
 ```env
-STRIPE_KEY=pk_test_51R3aBuB7vEKaMXACbUWsRZMSSFs0LUTsGWnsmUJ857ay5VCPAVqxu0WEFV2MNbsJ7dEdx0swUIk19r4pj06RHHO200jh4joSLt
-STRIPE_SECRET=sk_test_51R3aBuB7vEKaMXACZBd4MQK4PnieOAmR7AvOOV5dKh43aGg58xh5HmAUTd1RN8T5Is1LXrO4t81hplbuGgd0cKss00ik6INAgj
+STRIPE_KEY=your_stripe_public_key
+STRIPE_SECRET=your_stripe_secret_key
 ```
 
 - ローカル環境で決済をテストする場合は、Stripe のテストカードを使用できます。
