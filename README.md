@@ -44,8 +44,8 @@ coachtechフリマは、ユーザーが商品を出品し、購入できるフ�
 MAIL_MAILER=smtp
 MAIL_HOST=sandbox.smtp.mailtrap.io
 MAIL_PORT=2525
-MAIL_USERNAME=219181572109af
-MAIL_PASSWORD=8e77b1977b7404
+MAIL_USERNAME=your_mailtrap_username
+MAIL_PASSWORD=your_mailtrap_password
 MAIL_ENCRYPTION=tls
 MAIL_FROM_ADDRESS=test@example.com
 MAIL_FROM_NAME="coachtech_fleamarket"
