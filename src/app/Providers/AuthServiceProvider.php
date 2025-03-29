@@ -26,7 +26,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // メール認証を有効化
         VerifyEmail::createUrlUsing(function ($notifiable) {
             return url("/email/verify/{$notifiable->getKey()}");
         });

@@ -59,12 +59,10 @@ class PurchaseController extends Controller
 
         $user = auth()->user();
 
-        // セッションから送付先情報を取得
         $postal_code = session('shipping_postal_code');
         $address = session('shipping_address');
         $building = session('shipping_building');
 
-        // 購入情報をデータベースに保存
         $purchase = Purchase::create([
             'user_id' => $user->id,
             'item_id' => $item->id,
@@ -74,7 +72,6 @@ class PurchaseController extends Controller
             'payment_method' => $request->payment_method,
         ]);
 
-        // 商品の購入済みステータスを更新
         $item->is_sold = true;
         $item->save();
 
@@ -94,7 +91,6 @@ class PurchaseController extends Controller
             ->latest()
             ->first();
 
-        // 支払い方法を更新
         if ($purchase) {
             $purchase->payment_method = $request->payment_method == 'credit-card' 
                 ? 'カード支払い' 

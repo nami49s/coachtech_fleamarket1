@@ -24,7 +24,6 @@ class PurchaseAddressTest extends TestCase
 
         session(['item_id' => $item->id]);
 
-        // 住所情報を送信
         $response = $this->post(route('update_address'), [
             'postal_code' => '123-4567',
             'address' => '東京都新宿区2-2-2',

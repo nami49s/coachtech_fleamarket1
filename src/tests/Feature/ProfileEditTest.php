@@ -27,20 +27,16 @@ class ProfileEditTest extends TestCase
             'building' => 'サンプルビル101'
         ]);
 
-        // ユーザーとしてログイン
         $this->actingAs($user);
 
-        // プロフィール編集ページにアクセス
         $response = $this->get(route('mypage.profile'));
 
-        // 各項目が正しく表示されていることを確認
         $response->assertSee('テストユーザー');
         $response->assertSee('storage/profile_images/profile.jpg');
         $response->assertSee('123-4567');
         $response->assertSee('東京都新宿区1-1-1');
         $response->assertSee('サンプルビル101');
 
-        // ステータスコード 200 を確認
         $response->assertStatus(200);
     }
 }

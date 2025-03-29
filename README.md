@@ -27,6 +27,7 @@ coachtechフリマは、ユーザーが商品を出品し、購入できるフ�
 4. php artisan key:generate
 5. php artisan migrate
 6. php artisan db:seed
+7. php artisan serve
 
 ## 使用技術
 - PHP 8.4.3
