@@ -15,7 +15,7 @@ coachtechフリマは、ユーザーが商品を出品し、購入できるフ�
 
 ## 環境構築
 ### Dockerビルド
-1. git clone git@github.com:nami49s/coachtech_fleamarket.git
+1. git clone git@github.com:nami49s/coachtech_fleamarket1.git
 2. cd coachtech_fleamarket1
 3. docker-compose up -d --build
 
