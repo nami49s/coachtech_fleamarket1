@@ -22,7 +22,7 @@ coachtechフリマは、ユーザーが商品を出品し、購入できるフ�
 * MySQLは、OSによって起動しない場合があるのでそれぞれのPCに合わせてdocker-compose.ymlファイルを編集してください。
 
 ### Laravel環境構築
-1. d.env.exampleをコピーして.envを作成し、環境変数を変更
+1. .env.exampleをコピーして.envを作成し、環境変数を変更
 2. 作成した.envファイルをsrcに移動
 3. docker-compose exec php bash
 4. composer install
