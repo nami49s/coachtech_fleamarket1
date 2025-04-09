@@ -24,13 +24,14 @@ coachtechフリマは、ユーザーが商品を出品し、購入できるフ�
 ### Laravel環境構築
 1. .env.exampleをコピーして.envを作成し、環境変数を変更
 2. 作成した.envファイルをsrcに移動
-3. docker-compose exec php bash
-4. composer install
-5. php artisan key:generate
-6. php artisan storage:link
-7. php artisan migrate
-8. php artisan db:seed
-9. php artisan serve
+3. cd src
+4. docker-compose exec php bash
+5. composer install
+6. php artisan key:generate
+7. php artisan storage:link
+8. php artisan migrate
+9. php artisan db:seed
+10. php artisan serve
 * .envファイル作成後、.envファイル内にVIEW_COMPILED_PATH=coachtech_fleamarket1/src/storage/framework/viewsとCACHE_PATH=coachtech_fleamarket1/src/storage/framework/cacheを記述してください。
 * うまくいかない場合はDB_HOST=mysqlにしてキャッシュクリア、その後mysqlでDROP DATABASE IF EXISTS laravel_db;とCREATE DATABASE laravel_db;を実行した後にマイグレーションとシーディングを行ってください。
 
