@@ -38,7 +38,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '良好',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'items/Armani+Mens+Clock.jpg'
+                'item_image' => 'items/ArmaniMensClock.jpg'
             ],
             [
                 'name' => 'HDD',
@@ -48,7 +48,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'items/HDD+Hard+Disk.jpg'
+                'item_image' => 'items/HDDHardDisk.jpg'
             ],
             [
                 'name' => '玉ねぎ3束',
@@ -58,7 +58,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => 'やや傷や汚れあり',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'items/iLoveIMG+d.jpg'
+                'item_image' => 'items/iLoveIMGd.jpg'
             ],
             [
                 'name' => '革靴',
@@ -68,7 +68,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '状態が悪い',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'item_images/Leather+Shoes+Product+Photo.jpg'
+                'item_image' => 'item_images/LeatherShoesProductPhoto.jpg'
             ],
             [
                 'name' => 'ノートPC',
@@ -78,7 +78,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '良好',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'item_images/Living+Room+Laptop.jpg'
+                'item_image' => 'item_images/LivingRoomLaptop.jpg'
             ],
             [
                 'name' => 'マイク',
@@ -88,7 +88,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'item_images/Music+Mic+4632231.jpg'
+                'item_image' => 'item_images/MusicMic4632231.jpg'
             ],
             [
                 'name' => 'ショルダーバッグ',
@@ -98,7 +98,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => 'やや傷や汚れあり',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'item_images/Purse+fashion+pocket.jpg'
+                'item_image' => 'item_images/Pursefashionpocket.jpg'
             ],
             [
                 'name' => 'タンブラー',
@@ -108,7 +108,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '状態が悪い',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'item_images/Tumbler+souvenir.jpg'
+                'item_image' => 'item_images/Tumblersouvenir.jpg'
             ],
             [
                 'name' => 'コーヒーミル',
@@ -118,7 +118,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '良好',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'item_images/Waitress+with+Coffee+Grinder.jpg'
+                'item_image' => 'item_images/WaitresswithCoffeeGrinder.jpg'
             ],
             [
                 'name' => 'メイクセット',

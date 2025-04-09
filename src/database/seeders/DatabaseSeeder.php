@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,15 +24,15 @@ class DatabaseSeeder extends Seeder
 
         // item画像コピー
         $itemImages = [
-            'Armani Mens Clock.jpg',
-            'HDD Hard Disk.jpg',
-            'iLoveIMG d.jpg',
-            'Leather Shoes Product Photo.jpg',
-            'Living Room Laptop.jpg',
-            'Music Mic 4632231.jpg',
-            'Purse fashion pocket.jpg',
-            'Tumbler souvenir.jpg',
-            'Waitress with Coffee Grinder.jpg',
+            'ArmaniMensClock.jpg',
+            'HDDHardDisk.jpg',
+            'iLoveIMGd.jpg',
+            'LeatherShoesProductPhoto.jpg',
+            'LivingRoomLaptop.jpg',
+            'MusicMic4632231.jpg',
+            'Pursefashionpocket.jpg',
+            'Tumblersouvenir.jpg',
+            'WaitresswithCoffeeGrinder.jpg',
             'makeset.jpg',
             'sample.jpg',
         ];
@@ -48,7 +49,7 @@ class DatabaseSeeder extends Seeder
             database_path('seeders/images/profile.jpg'),
             storage_path('app/public/profile_images/profile.jpg')
         );
-        
+
         $this->call([
             UsersTableSeeder::class,
             CategoriesTableSeeder::class,
