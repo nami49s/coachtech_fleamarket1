@@ -22,14 +22,16 @@ coachtechフリマは、ユーザーが商品を出品し、購入できるフ�
 * MySQLは、OSによって起動しない場合があるのでそれぞれのPCに合わせてdocker-compose.ymlファイルを編集してください。
 
 ### Laravel環境構築
-1. docker-compose exec php bash
-2. composer install
-3. .env.exampleをコピーして.envを作成し、環境変数を変更
-4. 作成した.envファイルをsrcに移動
+1. d.env.exampleをコピーして.envを作成し、環境変数を変更
+2. 作成した.envファイルをsrcに移動
+3. docker-compose exec php bash
+4. composer install
 5. php artisan key:generate
-6. php artisan migrate
-7. php artisan db:seed
-8. php artisan serve
+6. php artisan storage:link
+7. php artisan migrate
+8. php artisan db:seed
+9. php artisan serve
+* .envファイル作成後、.envファイル内にVIEW_COMPILED_PATH=coachtech_fleamarket1/src/storage/framework/viewsとCACHE_PATH=coachtech_fleamarket1/src/storage/framework/cacheを記述してください。
 * うまくいかない場合はDB_HOST=mysqlにしてキャッシュクリア、その後mysqlでDROP DATABASE IF EXISTS laravel_db;とCREATE DATABASE laravel_db;を実行した後にマイグレーションとシーディングを行ってください。
 
 ## 使用技術

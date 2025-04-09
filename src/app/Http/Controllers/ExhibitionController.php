@@ -27,7 +27,7 @@ class ExhibitionController extends Controller
         $item = Item::create($validatedExhibitionData);
 
         if ($request->hasFile('item_image')) {
-            $path = $request->file('item_image')->store('items', 'public');
+            $path = $request->file('item_image')->store('item_images', 'public');
             $item->update(['item_image' => $path]);
         }
 
