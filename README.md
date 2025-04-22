@@ -89,3 +89,31 @@ STRIPE_SECRET=your_stripe_secret_key
 - メール: `test{timestamp}@example.com`（例: `test1609459200@example.com`）
 - パスワード: password
 このテストユーザーは、UsersTableSeeder によって作成されます。
+
+## テスト用データベースの設定
+このプロジェクトでは、テスト実行時に `laravel_test` データベースを使用します。
+
+### 1. テストDBの作成（MySQL）
+以下のコマンドを実行してください：
+
+```sql
+CREATE DATABASE laravel_test;
+GRANT ALL PRIVILEGES ON laravel_test.* TO 'your_db_user'@'localhost' IDENTIFIED BY 'your_db_password';
+FLUSH PRIVILEGES;
+```
+※ your_db_user と your_db_password は .env.testing に記載されている内容に合わせてください。
+
+### 2. .env.testing ファイルの設定
+プロジェクトルートに `.env.testing` を作成し、以下のようにプロジェクトルートに `.env.testing` を作成し、以下のように記述してください（`.env` をコピーして編集しても構いません）：
+```env
+DB_CONNECTION=mysql
+DB_DATABASE=laravel_test
+DB_USERNAME=your_db_user
+DB_PASSWORD=your_db_password
+```
+
+### 3. テスト用マイグレーションとシーディング
+```bash
+php artisan migrate --env=testing
+php artisan db:seed --env=testing
+```
