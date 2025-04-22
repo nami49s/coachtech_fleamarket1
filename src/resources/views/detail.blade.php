@@ -55,21 +55,25 @@
                 @if (auth()->check())
                     <form action="{{ route('items.like', ['item' => $item->id]) }}" method="POST">
                         @csrf
-                        <button type="submit" class="like-button {{ $item->likes()->where('user_id', auth()->id())->exists() ? 'liked' : '' }}">
-                            @if ($item->likes()->where('user_id', auth()->id())->exists())
-                                ❤️
-                            @else
-                                🤍
-                            @endif
+                        <button type="submit" class="like-button">
+                            @php
+                                $liked = $item->likes()->where('user_id', auth()->id())->exists();
+                            @endphp
+                            <img 
+                                src="{{ asset('images/star.png') }}" 
+                                alt="star" 
+                                class="like-icon {{ $liked ? 'liked' : 'not-liked' }}"
+                            >
                             <span class="like-count">{{ $item->likes()->count() }}</span>
                         </button>
                     </form>
                 @else
                     <p><a href="{{ route('login') }}">ログイン</a>すると「いいね」できます</p>
                 @endif
-                <p class="comment-icon">💬
+                <div class="comment-icon-wrapper">
+                    <img src="{{ asset('images/comment.png') }}" alt="comment" class="comment-img">
                     <span class="comment-icon-count">{{ $item->comments()->count() }}</span>
-                </p>
+                </div>
             </div>
 
             @if ($item->is_sold)

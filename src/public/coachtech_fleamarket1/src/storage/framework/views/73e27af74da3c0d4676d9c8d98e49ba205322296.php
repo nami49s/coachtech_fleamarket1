@@ -55,21 +55,25 @@
                 <?php if(auth()->check()): ?>
                     <form action="<?php echo e(route('items.like', ['item' => $item->id])); ?>" method="POST">
                         <?php echo csrf_field(); ?>
-                        <button type="submit" class="like-button <?php echo e($item->likes()->where('user_id', auth()->id())->exists() ? 'liked' : ''); ?>">
-                            <?php if($item->likes()->where('user_id', auth()->id())->exists()): ?>
-                                ❤️
-                            <?php else: ?>
-                                🤍
-                            <?php endif; ?>
+                        <button type="submit" class="like-button">
+                            <?php
+                                $liked = $item->likes()->where('user_id', auth()->id())->exists();
+                            ?>
+                            <img 
+                                src="<?php echo e(asset('images/star.png')); ?>" 
+                                alt="star" 
+                                class="like-icon <?php echo e($liked ? 'liked' : 'not-liked'); ?>"
+                            >
                             <span class="like-count"><?php echo e($item->likes()->count()); ?></span>
                         </button>
                     </form>
                 <?php else: ?>
                     <p><a href="<?php echo e(route('login')); ?>">ログイン</a>すると「いいね」できます</p>
                 <?php endif; ?>
-                <p class="comment-icon">💬
+                <div class="comment-icon-wrapper">
+                    <img src="<?php echo e(asset('images/comment.png')); ?>" alt="comment" class="comment-img">
                     <span class="comment-icon-count"><?php echo e($item->comments()->count()); ?></span>
-                </p>
+                </div>
             </div>
 
             <?php if($item->is_sold): ?>
