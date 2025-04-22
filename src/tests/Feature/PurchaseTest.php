@@ -15,10 +15,18 @@ class PurchaseTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /** @test */
     public function 購入するボタンを押下でStripeにリダイレクトされる()
     {
-        $user = User::factory()->create();
         $item = Item::factory()->create(['is_sold' => false]);
 
         $mockSession = Mockery::mock('overload:' . \Stripe\Checkout\Session::class);
@@ -26,7 +34,7 @@ class PurchaseTest extends TestCase
             ->once()
             ->andReturn((object)['url' => 'https://test.stripe.com/checkout']);
 
-        $response = $this->actingAs($user)->postJson(route('purchase.store', ['item' => $item->id]), [
+        $response = $this->postJson(route('purchase.store', ['item' => $item->id]), [
             'item_id' => $item->id,
             'payment_method' => 'credit-card'
         ]);
@@ -37,17 +45,15 @@ class PurchaseTest extends TestCase
     /** @test */
     public function Stripe決済完了後に購入処理が完了する()
     {
-        $user = User::factory()->create(['id' => 1]);
         $item = Item::factory()->create(['is_sold' => false]);
 
-        $response = $this->actingAs($user)->get(route('purchase.success', ['item' => $item->id]));
+        $response = $this->get(route('purchase.success', ['item' => $item->id]));
 
         $item->refresh();
         $this->assertTrue($item->is_sold);
 
-
         $this->assertDatabaseHas('purchases', [
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
 
@@ -58,7 +64,6 @@ class PurchaseTest extends TestCase
     /** @test */
     public function 購入した商品は商品一覧画面でSOLDと表示される()
     {
-        $buyer = User::factory()->create();
         $seller = User::factory()->create();
 
         $item = Item::factory()->create([
@@ -66,12 +71,12 @@ class PurchaseTest extends TestCase
             'is_sold' => false
         ]);
 
-        $this->actingAs($buyer)->post(route('purchase.store', ['item' => $item->id]));
+        $this->post(route('purchase.store', ['item' => $item->id]));
         $this->get(route('purchase.success', ['item' => $item->id]));
 
         $this->assertTrue(Item::find($item->id)->is_sold);
 
-        $response = $this->actingAs($buyer)->get(route('top'));
+        $response = $this->get(route('top'));
 
         $response->assertSee($item->name);
         $response->assertSee('SOLD');
@@ -80,23 +85,26 @@ class PurchaseTest extends TestCase
     /** @test */
     public function プロフィールの購入した商品一覧に追加される()
     {
-        $user = User::factory()->create();
         $item = Item::factory()->create(['is_sold' => false]);
 
-        $this->actingAs($user)->post(route('purchase.store', ['item' => $item->id]));
-
+        $this->post(route('purchase.store', ['item' => $item->id]));
         $this->get(route('purchase.success', ['item' => $item->id]));
 
         $this->assertDatabaseHas('purchases', [
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
 
-        $user->refresh();
+        $this->user->refresh();
 
-        $this->assertTrue($user->purchases->contains('item_id', $item->id));
+        $this->assertTrue($this->user->purchases->contains('item_id', $item->id));
 
-        $response = $this->actingAs($user)->get(route('mypage'));
+        $response = $this->get(route('mypage'));
         $response->assertSee($item->name);
+    }
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 }

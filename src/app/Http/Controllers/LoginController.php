@@ -20,11 +20,15 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            Log::debug('ログイン成功！', ['user' => Auth::user()]);
-            return redirect()->route('top');
-        }
+            $request->session()->regenerate();
+            $user = Auth::user();
 
-        Log::debug('ログイン失敗！');
+            if ($user->hasVerifiedEmail()) {
+                return redirect()->intended('/');
+            }
+
+            return redirect()->route('verification.notice');
+        }
         return back()->withErrors([
             'email' => 'ログイン情報が登録されていません'
         ]);

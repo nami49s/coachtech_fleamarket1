@@ -12,13 +12,20 @@ class LikeTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /** @test */
     public function いいねアイコンを押下するといいねが登録される()
     {
-        $user = User::factory()->create();
         $item = Item::factory()->create();
-
-        $this->actingAs($user);
 
         $response = $this->post(route('items.like', ['item' => $item->id]));
 
@@ -26,7 +33,7 @@ class LikeTest extends TestCase
         $response->assertRedirect();
 
         $this->assertDatabaseHas('likes', [
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
     }
@@ -34,27 +41,24 @@ class LikeTest extends TestCase
     /** @test */
     public function いいね済みのアイコンは色が変化する()
     {
-        $user = User::factory()->create();
         $item = Item::factory()->create();
-        $user->likedItems()->attach($item->id);
+        $this->user->likedItems()->attach($item->id);
 
-        $response = $this->actingAs($user)->get(route('item.detail', ['item' => $item->id]));
+        $response = $this->get(route('item.detail', ['item' => $item->id]));
         $response->assertSee('liked');
     }
 
     /** @test */
     public function いいねアイコンを再度押下するといいねが解除される()
     {
-        $user = User::factory()->create();
         $item = Item::factory()->create();
-        $user->likedItems()->attach($item->id);
+        $this->user->likedItems()->attach($item->id);
 
-        $this->actingAs($user)
-            ->post(route('items.like', ['item' => $item->id]))
+        $this->post(route('items.like', ['item' => $item->id]))
             ->assertStatus(302);
 
         $this->assertDatabaseMissing('likes', [
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
     }

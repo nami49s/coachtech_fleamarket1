@@ -14,14 +14,19 @@ class ItemCreateTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /** @test */
     public function 商品出品画面で必要な情報が正しく保存される()
     {
-        $user = User::factory()->create();
-
         $category = Category::factory()->create();
-
-        $this->actingAs($user);
 
         $itemData = [
             'name' => 'テスト商品',
@@ -31,13 +36,13 @@ class ItemCreateTest extends TestCase
             'price' => '1000',
             'category_ids' => [$category->id],
             'condition' => '良好',
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
         ];
 
-        $response = $this->actingAs($user)->post(route('sell.store'), $itemData);
+        $response = $this->post(route('sell.store'), $itemData);
 
         $item = Item::where('name', 'テスト商品')->first();
-        $this->assertNotNull($item, "商品がデータベースに保存されていません");;
+        $this->assertNotNull($item, "商品がデータベースに保存されていません");
 
         $this->assertDatabaseHas('item_category', [
             'item_id' => $item->id,

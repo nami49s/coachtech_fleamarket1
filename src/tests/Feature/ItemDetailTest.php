@@ -15,11 +15,18 @@ class ItemDetailTest extends TestCase
 {
     use RefreshDatabase;
 
+        protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /** @test */
     public function 詳細ページに必要な情報が表示される()
     {
-        $user = User::factory()->create();
-
         $item = Item::factory()->create([
             'name' => 'テスト商品',
             'brand' => 'テストブランド',
@@ -32,13 +39,13 @@ class ItemDetailTest extends TestCase
         $category = Category::factory()->create();
         $item->categories()->attach($category->id);
 
-        like::factory()->create([
-            'user_id' => $user->id,
+        Like::factory()->create([
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
 
-        $comment = Comment::factory()->create([
-            'user_id' => $user->id,
+        Comment::factory()->create([
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
             'comment' => 'これはテストコメントです。',
         ]);
@@ -46,7 +53,6 @@ class ItemDetailTest extends TestCase
         $response = $this->get(route('item.detail', ['item' => $item->id]));
 
         $response->assertStatus(200);
-
         $response->assertSee('テスト商品');
         $response->assertSee('テストブランド');
         $response->assertSee('1,000');
@@ -54,7 +60,7 @@ class ItemDetailTest extends TestCase
         $response->assertSee('新品');
         $response->assertSee('item_images/test.jpg');
         $response->assertSee('1');
-        $response->assertSee($user->name);
+        $response->assertSee($this->user->name);
         $response->assertSee('これはテストコメントです。');
     }
 }

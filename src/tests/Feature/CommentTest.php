@@ -13,13 +13,19 @@ class CommentTest extends TestCase
 {
     use RefreshDatabase;
 
+        protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /** @test */
     public function ログイン済みのユーザーはコメントを送信できる()
     {
-        $user = User::factory()->create();
         $item = Item::factory()->create();
-
-        $this->actingAs($user);
 
         $response = $this->post(route('comments.store', ['item' => $item->id]), [
             'comment' => 'これはテストコメントです。',
@@ -29,7 +35,7 @@ class CommentTest extends TestCase
         $response->assertRedirect();
 
         $this->assertDatabaseHas('comments', [
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
             'comment' => 'これはテストコメントです。',
         ]);
@@ -38,10 +44,7 @@ class CommentTest extends TestCase
     /** @test */
     public function コメントが入力されていない場合バリデーションメッセージが表示される()
     {
-        $user = User::factory()->create();
         $item = Item::factory()->create();
-
-        $this->actingAs($user);
 
         $response = $this->post(route('comments.store', ['item' => $item->id]), [
             'comment' => '',
@@ -53,10 +56,7 @@ class CommentTest extends TestCase
     /** @test */
     public function コメントが255字以上の場合バリデーションが表示される()
     {
-        $user = User::factory()->create();
         $item = Item::factory()->create();
-
-        $this->actingAs($user);
 
         $longComment = str_repeat('あ', 256);
 

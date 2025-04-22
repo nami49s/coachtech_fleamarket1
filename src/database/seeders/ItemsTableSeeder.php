@@ -38,7 +38,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '良好',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'items/ArmaniMensClock.jpg'
+                'item_image' => 'item_images/ArmaniMensClock.jpg'
             ],
             [
                 'name' => 'HDD',
@@ -48,7 +48,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'items/HDDHardDisk.jpg'
+                'item_image' => 'item_images/HDDHardDisk.jpg'
             ],
             [
                 'name' => '玉ねぎ3束',
@@ -58,7 +58,7 @@ class ItemsTableSeeder extends Seeder
                 'condition' => 'やや傷や汚れあり',
                 'status' => 'available',
                 'is_sold' => '0',
-                'item_image' => 'items/iLoveIMGd.jpg'
+                'item_image' => 'item_images/iLoveIMGd.jpg'
             ],
             [
                 'name' => '革靴',

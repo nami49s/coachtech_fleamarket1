@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="{{ asset('css/sanitize.css') }}" >
     <link rel="stylesheet" href="{{ asset('css/common.css') }}" >
     <link rel="stylesheet" href="{{ asset('css/detail.css') }}" >
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -99,7 +106,10 @@
                 <form action="{{ route('comments.store', $item) }}" method="POST">
                     @csrf
                     <p class="comment-title">商品へのコメント</p>
-                    <textarea name="comment" required placeholder="コメントを入力"></textarea>
+                    @if ($errors->has('comment'))
+                        <p class="error-message">{{ $errors->first('comment') }}</p>
+                    @endif
+                    <textarea name="comment" placeholder="コメントを入力"></textarea>
                     <button class="comment-button" type="submit">コメントを送信する</button>
                 </form>
             @else

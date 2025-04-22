@@ -14,12 +14,19 @@ class PurchaseAddressTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /** @test */
     public function 送付先住所が商品購入画面に正しく反映される()
     {
-        $user = User::factory()->create();
-        $this->actingAs($user);
-
         $item = Item::factory()->create();
 
         session(['item_id' => $item->id]);
@@ -40,17 +47,14 @@ class PurchaseAddressTest extends TestCase
     /** @test */
     public function 購入した商品に送付先住所が紐づいて登録される()
     {
-        $user = User::factory()->create();
         Profile::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'postal_code' => '123-4567',
             'address' => '東京都渋谷区1-1-1',
             'building' => 'テストビル101'
         ]);
 
         $item = Item::factory()->create();
-
-        $this->actingAs($user);
 
         $this->post(route('update_address'), [
             'postal_code' => '987-6543',
@@ -65,7 +69,7 @@ class PurchaseAddressTest extends TestCase
         $response->assertRedirect();
 
         $this->assertDatabaseHas('purchases', [
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
             'postal_code' => '987-6543',
             'address' => '東京都新宿区2-2-2',

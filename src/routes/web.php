@@ -48,7 +48,7 @@ Route::post('/purchase/payment', [PurchaseController::class, 'updatePaymentMetho
 Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 
 // 認証が必要なルート
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // マイページ
     Route::get('/mypage', [MypageController::class, 'index'])->name('mypage');
     Route::get('/mypage/profile', [UpdateController::class, 'show'])->name('mypage.profile');

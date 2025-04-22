@@ -14,48 +14,49 @@ class MyListTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected $user;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->user = User::factory()->create();
+        $this->actingAs($this->user);
+    }
+
     /** @test */
     public function いいねした商品だけが表示される()
     {
-        $user = User::factory()->create();
-
         $likedItem = Item::factory()->create();
         $notLikedItem = Item::factory()->create();
 
         Like::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $likedItem->id,
         ]);
 
-        $response = $this->actingAs($user)->get(route('top', ['tab' => 'mylist']));
+        $response = $this->get(route('top', ['tab' => 'mylist']));
 
         $response->assertStatus(200);
-
         $response->assertSee($likedItem->name);
-
         $response->assertDontSee($notLikedItem->name);
     }
 
     /** @test */
     public function 購入済み商品は_SOLD_と表示される()
     {
-        $user = User::factory()->create();
-
-        $item = Item::factory()->create([
-            'user_id' => $user->id,
-        ]);
+        $item = Item::factory()->create();
 
         Purchase::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
 
         Like::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
 
-        $response = $this->actingAs($user)->get(route('top', ['tab' => 'mylist']));
+        $response = $this->get(route('top', ['tab' => 'mylist']));
 
         $response->assertSee('SOLD');
     }
@@ -63,23 +64,18 @@ class MyListTest extends TestCase
     /** @test */
     public function 自分が出品した商品は表示されない()
     {
-        $user = User::factory()->create();
-
-        $myItem = Item::factory()->create(['user_id' => $user->id]);
-
+        $myItem = Item::factory()->create(['user_id' => $this->user->id]);
         $otherItem = Item::factory()->create();
 
         Like::factory()->create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'item_id' => $otherItem->id,
         ]);
 
-        $response = $this->actingAs($user)->get(route('top', ['tab' => 'mylist']));
+        $response = $this->get(route('top', ['tab' => 'mylist']));
 
         $response->assertStatus(200);
-
         $response->assertDontSee($myItem->name);
-
         $response->assertSee($otherItem->name);
     }
 
@@ -87,8 +83,10 @@ class MyListTest extends TestCase
     public function 未認証の場合は何も表示されない()
     {
         $item = Item::factory()->create();
-
         Like::factory()->create(['item_id' => $item->id]);
+
+        // ログアウトして未認証状態にする
+        auth()->logout();
 
         $response = $this->get(route('top', ['tab' => 'mylist']));
 
