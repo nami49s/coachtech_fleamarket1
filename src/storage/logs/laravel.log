@@ -15767,3 +15767,5 @@
 "} 
 [2025-04-23 07:42:57] testing.INFO: Register Request Received: {"name":"テストユーザー","email":"test@example.com","password":"password123","password_confirmation":"password123"} 
 [2025-04-23 07:42:57] testing.INFO: User Created Successfully: {"user_id":32} 
+[2025-04-23 18:42:07] local.INFO: Register Request Received: {"_token":"2tTv2CBJyDB65OVGGjiyu4Tm5FVItu1tjRHacGWZ","name":"時透無一郎","email":"tokito@mail.com","password":"muichiro","password_confirmation":"muichiro"} 
+[2025-04-23 18:42:07] local.INFO: User Created Successfully: {"user_id":12} 

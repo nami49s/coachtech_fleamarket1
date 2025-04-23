@@ -42,7 +42,7 @@
         </div>
         <div class="tabs">
             <a href="{{ route('mypage', ['tab' => 'selling']) }}" class="tab-link {{ $tab === 'selling' ? 'active' : '' }}">出品した商品</a>
-            <a href="{{ route('mypage', ['tab' => 'purchased']) }}" class="tab-link tab-link-right" id="purchased-tab">購入した品</a>
+            <a href="{{ route('mypage', ['tab' => 'purchased']) }}" class="tab-link tab-link-right" id="purchased-tab">購入した商品</a>
         </div>
         <div class="tab-content">
             @if ($tab === 'selling')

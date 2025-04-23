@@ -59,17 +59,25 @@
                             @php
                                 $liked = $item->likes()->where('user_id', auth()->id())->exists();
                             @endphp
-                            <img 
-                                src="{{ asset('images/star.png') }}" 
-                                alt="star" 
+                            <img
+                                src="{{ asset('images/star.png') }}"
+                                alt="star"
                                 class="like-icon {{ $liked ? 'liked' : 'not-liked' }}"
                             >
                             <span class="like-count">{{ $item->likes()->count() }}</span>
                         </button>
                     </form>
                 @else
-                    <p><a href="{{ route('login') }}">ログイン</a>すると「いいね」できます</p>
+                    <a href="{{ route('login') }}" class="like-button">
+                        <img
+                            src="{{ asset('images/star.png') }}"
+                            alt="star"
+                            class="like-icon not-liked"
+                        >
+                        <span class="like-count">{{ $item->likes()->count() }}</span>
+                    </a>
                 @endif
+
                 <div class="comment-icon-wrapper">
                     <img src="{{ asset('images/comment.png') }}" alt="comment" class="comment-img">
                     <span class="comment-icon-count">{{ $item->comments()->count() }}</span>
