@@ -96,11 +96,14 @@
             <p class="description"><?php echo e($item->description); ?></p>
 
             <h3>商品の情報</h3>
-            <p><strong class="category">カテゴリー</strong>
-                <?php $__currentLoopData = $item->categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <span class="category-content"><?php echo e($category->name); ?></span>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </p>
+            <div class="category-container">
+                <strong class="category-label">カテゴリー</strong>
+                <div class="category-wrapper">
+                    <?php $__currentLoopData = $item->categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <span class="category-content"><?php echo e($category->name); ?></span>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            </div>
             <p><strong class="condition">商品の状態</strong> <?php echo e($item->condition); ?></p>
 
             <h3 class="comment-count">コメント (<?php echo e($item->comments->count()); ?>)</h3>
