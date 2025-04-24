@@ -14,8 +14,8 @@
     </header>
     <main>
         <div class="container">
-            <h2>メール認証が必要です</h2>
-            <p>登録されたメールアドレスに認証リンクを送信しました。メール内のリンクをクリックして認証を完了してください。</p>
+            <p>登録していただいたメールアドレスに認証メールを送付しました。</p>
+            <p>メール認証を完了してください。</p>
 
             <?php if(session('message')): ?>
                 <div class="alert alert-success">
@@ -24,22 +24,16 @@
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="<?php echo e(route('verification.send')); ?>">
-                <?php echo csrf_field(); ?>
-                <button type="submit" class="btn btn-primary">認証メールを再送する</button>
-            </form>
+            <div class="btn-container">
+                <a href="<?php echo e(session('verification_link', '#')); ?>" class="btn btn-primary">
+                    認証はこちらから
+                </a>
 
-            <p class="mt-3">
-                ログアウトして別のアカウントでログインする場合は
-                <a href="<?php echo e(route('login')); ?>"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    こちら
-                </a>。
-            </p>
-
-            <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" class="d-none">
-                <?php echo csrf_field(); ?>
-            </form>
+                <form method="POST" action="<?php echo e(route('verification.send')); ?>">
+                    <?php echo csrf_field(); ?>
+                    <button type="submit" class="btn btn-resend">認証メールを再送する</button>
+                </form>
+            </div>
         </div>
     </main>
 </body>

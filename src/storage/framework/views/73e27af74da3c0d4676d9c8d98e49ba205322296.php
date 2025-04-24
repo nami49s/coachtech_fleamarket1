@@ -59,17 +59,25 @@
                             <?php
                                 $liked = $item->likes()->where('user_id', auth()->id())->exists();
                             ?>
-                            <img 
-                                src="<?php echo e(asset('images/star.png')); ?>" 
-                                alt="star" 
+                            <img
+                                src="<?php echo e(asset('images/star.png')); ?>"
+                                alt="star"
                                 class="like-icon <?php echo e($liked ? 'liked' : 'not-liked'); ?>"
                             >
                             <span class="like-count"><?php echo e($item->likes()->count()); ?></span>
                         </button>
                     </form>
                 <?php else: ?>
-                    <p><a href="<?php echo e(route('login')); ?>">ログイン</a>すると「いいね」できます</p>
+                    <a href="<?php echo e(route('login')); ?>" class="like-button">
+                        <img
+                            src="<?php echo e(asset('images/star.png')); ?>"
+                            alt="star"
+                            class="like-icon not-liked"
+                        >
+                        <span class="like-count"><?php echo e($item->likes()->count()); ?></span>
+                    </a>
                 <?php endif; ?>
+
                 <div class="comment-icon-wrapper">
                     <img src="<?php echo e(asset('images/comment.png')); ?>" alt="comment" class="comment-img">
                     <span class="comment-icon-count"><?php echo e($item->comments()->count()); ?></span>

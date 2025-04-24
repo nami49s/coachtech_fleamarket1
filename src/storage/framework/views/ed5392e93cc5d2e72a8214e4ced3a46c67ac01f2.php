@@ -42,7 +42,7 @@
         </div>
         <div class="tabs">
             <a href="<?php echo e(route('mypage', ['tab' => 'selling'])); ?>" class="tab-link <?php echo e($tab === 'selling' ? 'active' : ''); ?>">出品した商品</a>
-            <a href="<?php echo e(route('mypage', ['tab' => 'purchased'])); ?>" class="tab-link tab-link-right" id="purchased-tab">購入した品</a>
+            <a href="<?php echo e(route('mypage', ['tab' => 'purchased'])); ?>" class="tab-link tab-link-right" id="purchased-tab">購入した商品</a>
         </div>
         <div class="tab-content">
             <?php if($tab === 'selling'): ?>

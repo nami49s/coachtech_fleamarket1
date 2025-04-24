@@ -48,13 +48,11 @@ class ProfileTest extends TestCase
             ['item_id' => $item4->id, 'payment_method' => 'credit_card']
         ]);
 
-        $response = $this->get(route('mypage'));
+        $response = $this->actingAs($this->user)->get('/mypage?tab=purchased');
 
         $response->assertStatus(200);
         $response->assertSee('テストユーザー');
 
-        $response->assertSee($item1->name);
-        $response->assertSee($item2->name);
         $response->assertSee($item3->name);
         $response->assertSee($item4->name);
     }

@@ -97,9 +97,11 @@ class PurchaseTest extends TestCase
 
         $this->user->refresh();
 
-        $this->assertTrue($this->user->purchases->contains('item_id', $item->id));
+        $this->assertTrue($this->user->purchases->contains(function ($purchase) use ($item) {
+            return $purchase->item_id === $item->id;
+        }));
 
-        $response = $this->get(route('mypage'));
+        $response = $this->actingAs($this->user)->get('/mypage?tab=purchased');
         $response->assertSee($item->name);
     }
     protected function tearDown(): void

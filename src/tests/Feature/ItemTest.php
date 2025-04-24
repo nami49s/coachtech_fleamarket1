@@ -26,17 +26,16 @@ class ItemTest extends TestCase
     /** @test */
     public function 全商品を取得できる()
     {
+        $otherUser = User::factory()->create();
         $items = Item::factory()->count(3)->create([
-            'user_id' => $this->user->id,
+            'user_id' => $otherUser->id,
         ]);
 
         $response = $this->actingAs($this->user)->get(route('top', ['tab' => 'recommended']));
 
         $response->assertStatus(200);
-        $this->assertEquals(3, Item::count());
-
         foreach ($items as $item) {
-            $response->assertDontSee($item->name);
+            $response->assertSee($item->name);
         }
     }
 
