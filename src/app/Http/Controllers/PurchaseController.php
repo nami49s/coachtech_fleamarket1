@@ -18,6 +18,11 @@ class PurchaseController extends Controller
     {
         $item = Item::where('id', $itemId)->first();
         $user = auth()->user();
+
+        if ($user && $item->user_id === $user->id) {
+            return redirect()->route('top')->with('error', '自分の商品は購入できません。');
+        }
+
         $profile = $user ? $user->profile : null;
 
         session(['item_id' => $itemId]);
@@ -53,7 +58,7 @@ class PurchaseController extends Controller
     public function store(Request $request, Item $item)
     {
 
-        if ($item->is_sold) {
+        if ($item->completed) {
             return redirect()->back()->with('error', 'この商品はすでに購入されています。');
         }
 
@@ -72,7 +77,8 @@ class PurchaseController extends Controller
             'payment_method' => $request->payment_method,
         ]);
 
-        $item->is_sold = true;
+        $item->status = 'in_transaction';
+        $item->buyer_id = $user->id;
         $item->save();
 
         return (new StripeController())->checkout($request);

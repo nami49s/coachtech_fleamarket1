@@ -34,6 +34,20 @@
                 <img src="<?php echo e(asset('storage/' . $profile->profile_image)); ?>" width="150" alt="プロフィール画像">
                 <div class="profile-info">
                     <p class="name"><?php echo e($profile->name); ?></p>
+                    <p>
+                        <?php if(!is_null($user->averageRating())): ?>
+                            <span class="star-rating">
+                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                <?php if($i <= $user->averageRating()): ?>
+                                    <span class="star filled">&#9733;</span>
+                                <?php else: ?>
+                                    <span class="star">&#9733;</span>
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                    </span>
+                        <?php else: ?>
+                        <?php endif; ?>
+                    </p>
                     <a href="<?php echo e(route('mypage.profile')); ?>" class="btn">プロフィールを編集</a>
                 </div>
             <?php else: ?>
@@ -43,6 +57,12 @@
         <div class="tabs">
             <a href="<?php echo e(route('mypage', ['tab' => 'selling'])); ?>" class="tab-link <?php echo e($tab === 'selling' ? 'active' : ''); ?>">出品した商品</a>
             <a href="<?php echo e(route('mypage', ['tab' => 'purchased'])); ?>" class="tab-link tab-link-right" id="purchased-tab">購入した商品</a>
+            <a href="<?php echo e(route('mypage', ['tab' => 'in_transaction'])); ?>" class="tab-link <?php echo e($tab === 'in_transaction' ? 'active' : ''); ?>">
+                取引中の商品
+                <?php if($unreadMessageCount > 0): ?>
+                    <span class="badge"><?php echo e($unreadMessageCount); ?></span>
+                <?php endif; ?>
+            </a>
         </div>
         <div class="tab-content">
             <?php if($tab === 'selling'): ?>
@@ -77,8 +97,44 @@
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php endif; ?>
+                <?php elseif($tab === 'in_transaction'): ?>
+                    <?php if($inTransactionItems->isEmpty()): ?>
+                        <p>取引中の商品はありません。</p>
+                    <?php else: ?>
+                        <?php $__currentLoopData = $inTransactionItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="item-card" style="position: relative; display: inline-block; margin: 10px;">
+                            <a href="<?php echo e(route('chat.show', ['item' => $item->id])); ?>" style="display: block; position: relative;">
+                                
+                                <img src="<?php echo e(asset('storage/' . $item->item_image)); ?>" width="100" alt="<?php echo e($item->name); ?>" style="display: block;">
+
+                                
+                                <?php if($item->unread_count > 0): ?>
+                                    <span style="
+                                        position: absolute;
+                                        top: 0px;
+                                        right: 0px;
+                                        background: red;
+                                        color: white;
+                                        border-radius: 50%;
+                                        padding: 2px 6px;
+                                        font-size: 12px;
+                                        line-height: 1;
+                                    ">
+                                        <?php echo e($item->unread_count); ?>
+
+                                    </span>
+                                <?php endif; ?>
+
+                                <p class="item-name"><?php echo e($item->name); ?></p>
+                                <span class="in-transaction-label">取引中</span>
+                            </a>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+
             <?php endif; ?>
         </div>
     </main>
 </body>
-</html><?php /**PATH /var/www/resources/views/mypage.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH /var/www/resources/views/mypage.blade.php ENDPATH**/ ?>

@@ -31,7 +31,59 @@ class UsersTableSeeder extends Seeder
             'building' => 'テストビル101',
         ]);
 
-        User::factory(10)->create()->each(function ($user) {
+        $fixedUsers = [
+            [
+                'name' => 'ユーザーA',
+                'email' => 'usera@example.com',
+                'password' => Hash::make('password'),
+                'profile' => [
+                    'profile_image' => 'profile_images/profile.jpg',
+                    'name' => 'ユーザーA',
+                    'postal_code' => '111-1111',
+                    'address' => 'A県A市',
+                    'building' => 'Aビル101',
+                ]
+            ],
+            [
+                'name' => 'ユーザーB',
+                'email' => 'userb@example.com',
+                'password' => Hash::make('password'),
+                'profile' => [
+                    'profile_image' => 'profile_images/profile.jpg',
+                    'name' => 'ユーザーB',
+                    'postal_code' => '222-2222',
+                    'address' => 'B県B市',
+                    'building' => 'Bビル202',
+                ]
+            ],
+            [
+                'name' => 'ユーザーC',
+                'email' => 'userc@example.com',
+                'password' => Hash::make('password'),
+                'profile' => [
+                    'profile_image' => 'profile_images/profile.jpg',
+                    'name' => 'ユーザーC',
+                    'postal_code' => '333-3333',
+                    'address' => 'C県C市',
+                    'building' => 'Cビル303',
+                ]
+            ]
+        ];
+
+        foreach ($fixedUsers as $data) {
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'],
+            ]);
+
+            Profile::create(array_merge(
+                ['user_id' => $user->id],
+                $data['profile']
+            ));
+        }
+
+        User::factory(7)->create()->each(function ($user) {
             Profile::factory()->create(['user_id' => $user->id]);
         });
     }

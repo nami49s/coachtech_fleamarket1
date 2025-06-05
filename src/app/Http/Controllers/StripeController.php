@@ -96,7 +96,10 @@ class StripeController extends Controller
                 'payment_method' => $paymentMethod,
             ]);
 
-            $item->update(['is_sold' => true]);
+            $item->update([
+                'buyer_id' => Auth::id(),
+                'status' => 'in_transaction',
+            ]);
         });
 
         session()->forget(['shipping_postal_code', 'shipping_address', 'shipping_building', 'payment_method']);

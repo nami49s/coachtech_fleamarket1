@@ -81,14 +81,24 @@ STRIPE_SECRET=your_stripe_secret_key
 - phpMyAdmin:http://localhost:8080
 
 ## ER図
-![ER図](public/images/coachtech-flea-market.png)
+![ER図](public/images/flea-market.png)
 
 ## テストユーザー情報
 一般ユーザー:
 シーディングで作成されるテストユーザーのメールアドレスは、毎回異なります。これは、test と現在時刻 (time()) を組み合わせて一意のメールアドレスを生成しているためです。
 - メール: `test{timestamp}@example.com`（例: `test1609459200@example.com`）
 - パスワード: password
-このテストユーザーは、UsersTableSeeder によって作成されます。
+ユーザーA:
+- メール: `usera@example.com`
+- パスワード: password
+ユーザーB:
+- メール: `userb@example.com`
+- パスワード: password
+ユーザーC
+- メール: `userc@example.com`
+- パスワード: password
+
+このテストユーザーとユーザーA、B、Cは、UsersTableSeeder によって作成されます。
 
 ## テスト用データベースの設定
 このプロジェクトでは、テスト実行時に `laravel_test` データベースを使用します。

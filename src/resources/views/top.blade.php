@@ -28,6 +28,11 @@
         @endif
     </header>
     <main>
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="tabs">
             <a href="{{ route('top', ['tab' => 'recommended', 'query' => request()->get('query')]) }}" class="tab-link {{ $tab === 'recommended' ? 'active' : '' }}">おすすめ</a>
             <a href="{{ route('top', ['tab' => 'mylist', 'query' => request()->get('query')]) }}" class="tab-link tab-link-right {{ $tab === 'mylist' ? 'active' : '' }}">マイリスト</a>

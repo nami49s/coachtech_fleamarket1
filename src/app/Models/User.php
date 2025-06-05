@@ -70,4 +70,20 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new VerifyEmail());
     }
+
+    public function receivedRatings()
+    {
+        return $this->hasMany(UserRating::class, 'ratee_id');
+    }
+
+    public function averageRating(): ?int
+    {
+        $average = $this->receivedRatings()->avg('rating');
+
+        if ($average === null) {
+            return null; // 評価が1件もないときは null を返す
+        }
+
+        return round($average); // 四捨五入して整数にする
+    }
 }

@@ -34,6 +34,20 @@
                 <img src="{{ asset('storage/' . $profile->profile_image) }}" width="150" alt="プロフィール画像">
                 <div class="profile-info">
                     <p class="name">{{ $profile->name }}</p>
+                    <p>
+                        @if (!is_null($user->averageRating()))
+                            <span class="star-rating">
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= $user->averageRating())
+                                    <span class="star filled">&#9733;</span>
+                                @else
+                                    <span class="star">&#9733;</span>
+                                @endif
+                            @endfor
+                    </span>
+                        @else
+                        @endif
+                    </p>
                     <a href="{{ route('mypage.profile') }}" class="btn">プロフィールを編集</a>
                 </div>
             @else
@@ -43,6 +57,12 @@
         <div class="tabs">
             <a href="{{ route('mypage', ['tab' => 'selling']) }}" class="tab-link {{ $tab === 'selling' ? 'active' : '' }}">出品した商品</a>
             <a href="{{ route('mypage', ['tab' => 'purchased']) }}" class="tab-link tab-link-right" id="purchased-tab">購入した商品</a>
+            <a href="{{ route('mypage', ['tab' => 'in_transaction']) }}" class="tab-link {{ $tab === 'in_transaction' ? 'active' : '' }}">
+                取引中の商品
+                @if ($unreadMessageCount > 0)
+                    <span class="badge">{{ $unreadMessageCount }}</span>
+                @endif
+            </a>
         </div>
         <div class="tab-content">
             @if ($tab === 'selling')
@@ -77,6 +97,40 @@
                         </div>
                     @endforeach
                 @endif
+                @elseif ($tab === 'in_transaction')
+                    @if ($inTransactionItems->isEmpty())
+                        <p>取引中の商品はありません。</p>
+                    @else
+                        @foreach($inTransactionItems as $item)
+                        <div class="item-card" style="position: relative; display: inline-block; margin: 10px;">
+                            <a href="{{ route('chat.show', ['item' => $item->id]) }}" style="display: block; position: relative;">
+                                {{-- 商品画像 --}}
+                                <img src="{{ asset('storage/' . $item->item_image) }}" width="100" alt="{{ $item->name }}" style="display: block;">
+
+                                {{-- 未読メッセージバッジ --}}
+                                @if($item->unread_count > 0)
+                                    <span style="
+                                        position: absolute;
+                                        top: 0px;
+                                        right: 0px;
+                                        background: red;
+                                        color: white;
+                                        border-radius: 50%;
+                                        padding: 2px 6px;
+                                        font-size: 12px;
+                                        line-height: 1;
+                                    ">
+                                        {{ $item->unread_count }}
+                                    </span>
+                                @endif
+
+                                <p class="item-name">{{ $item->name }}</p>
+                                <span class="in-transaction-label">取引中</span>
+                            </a>
+                        </div>
+                    @endforeach
+                    @endif
+
             @endif
         </div>
     </main>

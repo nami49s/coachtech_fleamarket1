@@ -15,7 +15,8 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\StripeController;
-
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\UserRatingController;
 
 
 /*
@@ -70,6 +71,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/update_address', [PurchaseController::class, 'updateAddress'])->name('update_address');
     Route::post('/purchase/{item}', [PurchaseController::class, 'store'])->name('purchase.store');
     Route::get('/purchase/success/{item}', [StripeController::class, 'success'])->name('purchase.success');
+
+    // 取引チャット
+    Route::get('/chat/{item}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{item}', [ChatController::class, 'store'])->name('chat.store');
+    Route::post('/chat/complete/{item}', [ChatController::class, 'complete'])->name('chat.complete');
+
+    Route::put('/chat-message/{chatMessage}', [ChatController::class, 'update'])->name('chat.update');
+    Route::delete('/chat-message/{chatMessage}', [ChatController::class, 'destroy'])->name('chat.destroy');
+
+    Route::post('/items/{item}/ratings', [UserRatingController::class, 'store'])->name('ratings.store');
 });
 
 // ログアウト

@@ -10,8 +10,13 @@ class Item extends Model
 {
     use HasFactory;
 
+    const STATUS_ACTIVE = 'active';
+    const STATUS_IN_TRANSACTION = 'in_transaction';
+    const STATUS_COMPLETED = 'completed';
+
     protected $fillable = [
         'user_id',
+        'buyer_id',
         'item_image',
         'category_id',
         'condition',
@@ -20,7 +25,6 @@ class Item extends Model
         'description',
         'price',
         'status',
-        'is_sold'
     ];
     public function categories()
     {
@@ -44,6 +48,31 @@ class Item extends Model
     }
     public function getIsSoldAttribute()
     {
-        return $this->purchases()->exists();
+        return $this->status === self::STATUS_COMPLETED;
+    }
+
+    public function getIsInTransactionAttribute()
+    {
+        return $this->status === self::STATUS_IN_TRANSACTION;
+    }
+
+    public function getIsActiveAttribute()
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function buyer()
+    {
+        return $this->belongsTo(User::class, 'buyer_id');
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(UserRating::class);
+    }
+
+    public function ratingFrom($userId)
+    {
+        return $this->ratings()->where('rater_id', $userId)->first();
     }
 }
