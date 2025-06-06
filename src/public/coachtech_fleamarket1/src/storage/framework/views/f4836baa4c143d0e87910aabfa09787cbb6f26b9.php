@@ -58,21 +58,26 @@
 
             <?php if(auth()->id() === $item->buyer_id && !$item->ratingFrom(auth()->id())): ?>
             <!-- 取引完了ボタンを押すと評価モーダル -->
-            <button id="completeBtn">取引を完了する</button>
+            <button class="btn-complete"
+ id="completeBtn">取引を完了する</button>
 
             <div id="ratingModalBuyer" class="modal hidden">
+                <p class="modaltitle">取引が完了しました。</p>
+                <p class="comment">今回の取引相手はどうでしたか？</p>
                 <form action="<?php echo e(route('ratings.store', ['item' => $item->id])); ?>" method="POST">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="ratee_id" value="<?php echo e($item->user_id); ?>">
-                    <label>出品者を評価:</label>
-                    <select name="rating">
-                        <option value="5">★★★★★</option>
-                        <option value="4">★★★★</option>
-                        <option value="3">★★★</option>
-                        <option value="2">★★</option>
-                        <option value="1">★</option>
-                    </select>
-                    <button type="submit">送信</button>
+                    <label></label>
+                    <div class="star-rating">
+                        <?php for($i = 5; $i >= 1; $i--): ?>
+                            <input type="radio" id="star<?php echo e($i); ?>" name="rating" value="<?php echo e($i); ?>">
+                            <label for="star<?php echo e($i); ?>" title="<?php echo e($i); ?>つ星">★</label>
+                        <?php endfor; ?>
+                    </div>
+                    <hr class="modal-divider">
+                    <div class="submit-area">
+                        <button type="submit" class="rating-submit">送信する</button>
+                    </div>
                 </form>
             </div>
 
@@ -86,18 +91,22 @@
         <?php if(auth()->id() === $item->user_id && $item->ratingFrom($item->buyer_id) && !$item->ratingFrom(auth()->id())): ?>
             <!-- 出品者への評価モーダル自動表示 -->
             <div id="ratingModalSeller" class="modal">
+                <p class="modaltitle">取引が完了しました。</p>
+                <p class="comment">今回の取引相手はどうでしたか？</p>
                 <form action="<?php echo e(route('ratings.store', ['item' => $item->id])); ?>" method="POST">
                     <?php echo csrf_field(); ?>
                     <input type="hidden" name="ratee_id" value="<?php echo e($item->buyer_id); ?>">
-                    <label>購入者を評価:</label>
-                    <select name="rating">
-                        <option value="5">★★★★★</option>
-                        <option value="4">★★★★</option>
-                        <option value="3">★★★</option>
-                        <option value="2">★★</option>
-                        <option value="1">★</option>
-                    </select>
-                    <button type="submit">送信</button>
+                    <label></label>
+                    <div class="star-rating">
+                        <?php for($i = 5; $i >= 1; $i--): ?>
+                            <input type="radio" id="star<?php echo e($i); ?>" name="rating" value="<?php echo e($i); ?>">
+                            <label for="star<?php echo e($i); ?>" title="<?php echo e($i); ?>つ星">★</label>
+                        <?php endfor; ?>
+                    </div>
+                    <hr class="modal-divider">
+                    <div class="submit-area">
+                        <button type="submit" class="rating-submit">送信する</button>
+                    </div>
                 </form>
             </div>
             <script>
@@ -130,41 +139,55 @@
             <div class="chat-messages">
             <?php $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $message): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php
+                    $isOwn = $message->user_id === auth()->id();
                     $profile = $message->user->profile ?? null;
                 ?>
 
-                <div class="message <?php echo e($message->user_id === auth()->id() ? 'right' : 'left'); ?>">
+                <div class="message-wrapper <?php echo e($isOwn ? 'right' : 'left'); ?>">
                     
                     <div class="message-user-info">
-                        <?php if($profile && $profile->profile_image): ?>
-                            <img src="<?php echo e(asset('storage/' . $profile->profile_image)); ?>" alt="プロフィール画像" class="chat-profile-image">
+                        <?php if($isOwn): ?>
+                            
+                            <span class="chat-username"><?php echo e($profile->name ?? '未設定'); ?></span>
+                            <?php if($profile && $profile->profile_image): ?>
+                                <img src="<?php echo e(asset('storage/' . $profile->profile_image)); ?>" alt="プロフィール画像" class="chat-profile-image"style="margin-left: 8px; margin-right: 0;">
+                            <?php else: ?>
+                                <img src="<?php echo e(asset('images/default-user.png')); ?>" alt="デフォルト画像" class="chat-profile-image">
+                            <?php endif; ?>
                         <?php else: ?>
-                            <img src="<?php echo e(asset('images/default-user.png')); ?>" alt="デフォルト画像" class="chat-profile-image">
+                            
+                            <?php if($profile && $profile->profile_image): ?>
+                                <img src="<?php echo e(asset('storage/' . $profile->profile_image)); ?>" alt="プロフィール画像" class="chat-profile-image">
+                            <?php else: ?>
+                                <img src="<?php echo e(asset('images/default-user.png')); ?>" alt="デフォルト画像" class="chat-profile-image">
+                            <?php endif; ?>
+                            <span class="chat-username"><?php echo e($profile->name ?? '未設定'); ?></span>
                         <?php endif; ?>
-                        <span class="chat-username"><?php echo e($profile->name ?? '未設定'); ?></span>
                     </div>
 
                     
-                    <p><?php echo e($message->message); ?></p>
+                    <div class="message <?php echo e($isOwn ? 'right' : 'left'); ?>">
+                        <p><?php echo e($message->message); ?></p>
+                        <?php if($message->image_path): ?>
+                            <img src="<?php echo e(asset('storage/' . $message->image_path)); ?>" alt="画像" style="max-width: 200px;">
+                        <?php endif; ?>
+                    </div>
 
                     
-                    <?php if($message->image_path): ?>
-                        <img src="<?php echo e(asset('storage/' . $message->image_path)); ?>" alt="画像" style="max-width: 200px;">
-                    <?php endif; ?>
-
-                    
-                    <?php if($message->user_id === auth()->id()): ?>
-                        <form action="<?php echo e(route('chat.destroy', $message->id)); ?>" method="POST" style="display: inline;">
-                            <?php echo csrf_field(); ?>
-                            <?php echo method_field('DELETE'); ?>
-                            <button type="submit">削除</button>
-                        </form>
-                        <a href="javascript:void(0);" 
-                            class="edit-button" 
-                            data-id="<?php echo e($message->id); ?>" 
-                            data-message="<?php echo e($message->message); ?>">
-                            編集
-                        </a>
+                    <?php if($isOwn): ?>
+                        <div class="message-actions">
+                            <form action="<?php echo e(route('chat.destroy', $message->id)); ?>" method="POST" style="display: inline;">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('DELETE'); ?>
+                                <button type="submit">削除</button>
+                            </form>
+                            <a href="javascript:void(0);" 
+                                class="edit-button" 
+                                data-id="<?php echo e($message->id); ?>" 
+                                data-message="<?php echo e($message->message); ?>">
+                                編集
+                            </a>
+                        </div>
                     <?php endif; ?>
                 </div>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -181,7 +204,7 @@
             
             <form action="<?php echo e(route('chat.store', $item->id)); ?>" method="POST" class="chat-form" enctype="multipart/form-data" id="chat-form">
                 <?php echo csrf_field(); ?>
-                <textarea id="message" name="message" rows="2" placeholder="メッセージを入力..."><?php echo e(old('message')); ?></textarea>
+                <textarea id="message" name="message" rows="2" placeholder="取引メッセージを記入してください"><?php echo e(old('message')); ?></textarea>
                 
                 <input type="hidden" name="_method" id="form-method" value="POST">
                 <input type="hidden" name="edit_message_id" id="edit-message-id" value="">
@@ -191,8 +214,9 @@
                 <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
                 <span id="file-name" style="margin-left: 10px; font-size: 0.9em; color: #555;"></span>
                 <div id="image-preview" style="margin-top: 10px;"></div>
-
-                <button type="submit">送信</button>
+                <button type="submit" class="chat-submit-btn">
+                    <img src="<?php echo e(asset('images/e99395e98ea663a8400f40e836a71b8c4e773b01.jpg')); ?>" alt="送信">
+                </button>
             </form>
         </div>
     </div>

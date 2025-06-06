@@ -57,21 +57,26 @@
 
             @if(auth()->id() === $item->buyer_id && !$item->ratingFrom(auth()->id()))
             <!-- 取引完了ボタンを押すと評価モーダル -->
-            <button id="completeBtn">取引を完了する</button>
+            <button class="btn-complete"
+ id="completeBtn">取引を完了する</button>
 
             <div id="ratingModalBuyer" class="modal hidden">
+                <p class="modaltitle">取引が完了しました。</p>
+                <p class="comment">今回の取引相手はどうでしたか？</p>
                 <form action="{{ route('ratings.store', ['item' => $item->id]) }}" method="POST">
                     @csrf
                     <input type="hidden" name="ratee_id" value="{{ $item->user_id }}">
-                    <label>出品者を評価:</label>
-                    <select name="rating">
-                        <option value="5">★★★★★</option>
-                        <option value="4">★★★★</option>
-                        <option value="3">★★★</option>
-                        <option value="2">★★</option>
-                        <option value="1">★</option>
-                    </select>
-                    <button type="submit">送信</button>
+                    <label></label>
+                    <div class="star-rating">
+                        @for ($i = 5; $i >= 1; $i--)
+                            <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}">
+                            <label for="star{{ $i }}" title="{{ $i }}つ星">★</label>
+                        @endfor
+                    </div>
+                    <hr class="modal-divider">
+                    <div class="submit-area">
+                        <button type="submit" class="rating-submit">送信する</button>
+                    </div>
                 </form>
             </div>
 
@@ -85,18 +90,22 @@
         @if(auth()->id() === $item->user_id && $item->ratingFrom($item->buyer_id) && !$item->ratingFrom(auth()->id()))
             <!-- 出品者への評価モーダル自動表示 -->
             <div id="ratingModalSeller" class="modal">
+                <p class="modaltitle">取引が完了しました。</p>
+                <p class="comment">今回の取引相手はどうでしたか？</p>
                 <form action="{{ route('ratings.store', ['item' => $item->id]) }}" method="POST">
                     @csrf
                     <input type="hidden" name="ratee_id" value="{{ $item->buyer_id }}">
-                    <label>購入者を評価:</label>
-                    <select name="rating">
-                        <option value="5">★★★★★</option>
-                        <option value="4">★★★★</option>
-                        <option value="3">★★★</option>
-                        <option value="2">★★</option>
-                        <option value="1">★</option>
-                    </select>
-                    <button type="submit">送信</button>
+                    <label></label>
+                    <div class="star-rating">
+                        @for ($i = 5; $i >= 1; $i--)
+                            <input type="radio" id="star{{ $i }}" name="rating" value="{{ $i }}">
+                            <label for="star{{ $i }}" title="{{ $i }}つ星">★</label>
+                        @endfor
+                    </div>
+                    <hr class="modal-divider">
+                    <div class="submit-area">
+                        <button type="submit" class="rating-submit">送信する</button>
+                    </div>
                 </form>
             </div>
             <script>
@@ -129,41 +138,55 @@
             <div class="chat-messages">
             @foreach ($messages as $message)
                 @php
+                    $isOwn = $message->user_id === auth()->id();
                     $profile = $message->user->profile ?? null;
                 @endphp
 
-                <div class="message {{ $message->user_id === auth()->id() ? 'right' : 'left' }}">
-                    {{-- プロフィール画像と名前 --}}
+                <div class="message-wrapper {{ $isOwn ? 'right' : 'left' }}">
+                    {{-- プロフィール画像と名前（外に出す） --}}
                     <div class="message-user-info">
-                        @if ($profile && $profile->profile_image)
-                            <img src="{{ asset('storage/' . $profile->profile_image) }}" alt="プロフィール画像" class="chat-profile-image">
+                        @if ($isOwn)
+                            {{-- 自分のメッセージ：名前 → 画像 --}}
+                            <span class="chat-username">{{ $profile->name ?? '未設定' }}</span>
+                            @if ($profile && $profile->profile_image)
+                                <img src="{{ asset('storage/' . $profile->profile_image) }}" alt="プロフィール画像" class="chat-profile-image"style="margin-left: 8px; margin-right: 0;">
+                            @else
+                                <img src="{{ asset('images/default-user.png') }}" alt="デフォルト画像" class="chat-profile-image">
+                            @endif
                         @else
-                            <img src="{{ asset('images/default-user.png') }}" alt="デフォルト画像" class="chat-profile-image">
+                            {{-- 相手のメッセージ：画像 → 名前 --}}
+                            @if ($profile && $profile->profile_image)
+                                <img src="{{ asset('storage/' . $profile->profile_image) }}" alt="プロフィール画像" class="chat-profile-image">
+                            @else
+                                <img src="{{ asset('images/default-user.png') }}" alt="デフォルト画像" class="chat-profile-image">
+                            @endif
+                            <span class="chat-username">{{ $profile->name ?? '未設定' }}</span>
                         @endif
-                        <span class="chat-username">{{ $profile->name ?? '未設定' }}</span>
                     </div>
 
-                    {{-- メッセージ本文 --}}
-                    <p>{{ $message->message }}</p>
+                    {{-- メッセージ本文（背景付き） --}}
+                    <div class="message {{ $isOwn ? 'right' : 'left' }}">
+                        <p>{{ $message->message }}</p>
+                        @if ($message->image_path)
+                            <img src="{{ asset('storage/' . $message->image_path) }}" alt="画像" style="max-width: 200px;">
+                        @endif
+                    </div>
 
-                    {{-- 画像がある場合 --}}
-                    @if ($message->image_path)
-                        <img src="{{ asset('storage/' . $message->image_path) }}" alt="画像" style="max-width: 200px;">
-                    @endif
-
-                    {{-- 自分のメッセージ操作 --}}
-                    @if ($message->user_id === auth()->id())
-                        <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">削除</button>
-                        </form>
-                        <a href="javascript:void(0);" 
-                            class="edit-button" 
-                            data-id="{{ $message->id }}" 
-                            data-message="{{ $message->message }}">
-                            編集
-                        </a>
+                    {{-- 操作ボタン --}}
+                    @if ($isOwn)
+                        <div class="message-actions">
+                            <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit">削除</button>
+                            </form>
+                            <a href="javascript:void(0);" 
+                                class="edit-button" 
+                                data-id="{{ $message->id }}" 
+                                data-message="{{ $message->message }}">
+                                編集
+                            </a>
+                        </div>
                     @endif
                 </div>
             @endforeach
@@ -180,7 +203,7 @@
             {{-- メッセージ送信フォーム --}}
             <form action="{{ route('chat.store', $item->id) }}" method="POST" class="chat-form" enctype="multipart/form-data" id="chat-form">
                 @csrf
-                <textarea id="message" name="message" rows="2" placeholder="メッセージを入力...">{{ old('message') }}</textarea>
+                <textarea id="message" name="message" rows="2" placeholder="取引メッセージを記入してください">{{ old('message') }}</textarea>
                 {{-- 編集時用 --}}
                 <input type="hidden" name="_method" id="form-method" value="POST">
                 <input type="hidden" name="edit_message_id" id="edit-message-id" value="">
@@ -190,8 +213,9 @@
                 <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
                 <span id="file-name" style="margin-left: 10px; font-size: 0.9em; color: #555;"></span>
                 <div id="image-preview" style="margin-top: 10px;"></div>
-
-                <button type="submit">送信</button>
+                <button type="submit" class="chat-submit-btn">
+                    <img src="{{ asset('images/e99395e98ea663a8400f40e836a71b8c4e773b01.jpg') }}" alt="送信">
+                </button>
             </form>
         </div>
     </div>

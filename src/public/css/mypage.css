@@ -15,28 +15,52 @@ main {
     border-radius: 8px;
     width: 100%;
     max-width: 800px;
-    text-align: center;
     align-items: center;
     gap: 60px;
 }
 
 .profile-container img {
-    border-radius: 50%;
-    object-fit: cover;
     width: 150px;
     height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
 }
 
 .profile-info {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    gap: 200px;
+    width: 100%;
 }
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
 .name {
     font-weight: bold;
     font-size: 26px;
     margin: 0;
+}
+
+.star-rating {
+    font-size: 20px;
+}
+
+.star {
+    font-size: 24px;
+    color: #ccc;
+    /* 灰色の星 */
+}
+
+.star.filled {
+    color: #ffcc00;
+    /* 黄色い星 */
 }
 
 .btn {
@@ -63,12 +87,25 @@ main {
     color: black;
     font-weight: bold;
 }
+.in-transaction-label {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 18px;
+    margin-top: 6px;
+}
 
 .tab-link-right {
     margin-left: 60px;
 }
 
 .tab-link:hover {
+    color: #FF0000;
+}
+
+.tab-link.active {
     color: #FF0000;
 }
 
@@ -117,22 +154,15 @@ body[data-tab="purchased"] .tab-link:nth-child(2) {
 .badge {
     background-color: red;
     color: white;
-    border-radius: 50%;
-    padding: 4px 8px;
-    font-size: 12px;
-    line-height: 1;
-    z-index: 10;
-}
-
-.star {
-    font-size: 24px;
-    color: #ccc;
-    /* 灰色の星 */
-}
-
-.star.filled {
-    color: #ffcc00;
-    /* 黄色い星 */
+    border-radius: 40%;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    display: inline-block;
+    padding-bottom: 5px;
+    vertical-align: middle;
 }
 
 

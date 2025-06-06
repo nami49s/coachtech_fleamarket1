@@ -1,21 +1,20 @@
 /* 全体レイアウト */
 .chat-container {
     display: flex;
-    padding: 20px;
+    padding: 0 20px 0 0 ;
     gap: 20px;
 }
 
 .chat-sidebar {
     width: 200px;
-    background-color: #f3f3f3;
+    background-color: #989797;
     padding: 10px;
-    border-radius: 8px;
+    height: 100vh;
 }
 
 .chat-sidebar h3 {
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-    border-bottom: 1px solid #ccc;
+    font-size: 1.6rem;
+    color: #ffff;
     padding-bottom: 5px;
 }
 
@@ -25,12 +24,24 @@
 }
 
 .chat-sidebar li {
-    margin-bottom: 8px;
+    margin-bottom: 2rem;
 }
 
 .chat-sidebar a {
     text-decoration: none;
-    color: #333;
+    color: #000000;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #e1e1e1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 170px;
+    height: 30px;
+    text-align: center;
+    margin: 0 auto;
+    overflow: hidden;
 }
 
 .chat-main {
@@ -43,21 +54,31 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 20px;
 }
 
 .seller-profile-image img,
 .buyer-profile-image img {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     object-fit: cover;
 }
 
 .seller-name p,
 .buyer-name p {
-    font-size: 1.1rem;
+    font-size: 2rem;
     font-weight: bold;
+}
+
+.btn-complete {
+    align-items: right;
+    background-color: #fb8080;
+    border-radius: 30px;
+    border: 1px solid #fb8080;
+    font-size: 1rem;
+    color: #ffffff;
+    padding: 10px;
+    margin-left: auto;
 }
 
 /* 商品情報 */
@@ -66,31 +87,32 @@
     align-items: center;
     gap: 20px;
     margin-bottom: 20px;
+    border-top: 1px solid #3e3e3e;
+    padding-top: 20px;
 }
 
 .item-image img {
-    width: 100px;
-    border-radius: 6px;
+    width: 200px;
 }
 
 .item-info h2 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 2.5rem;
 }
 
 .price-symbol {
     font-weight: bold;
-    color: #555;
+    color: #000000;
 }
 
 .price-value {
-    font-size: 1.2rem;
-    color: #d36f6f;
+    font-size: 1.8rem;
+    color: #000000;
 }
 
 /* チャット部分 */
 .chat-box {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #3e3e3e;
     padding-top: 20px;
 }
 
@@ -101,30 +123,23 @@
     padding-right: 10px;
 }
 
-.message {
-    margin-bottom: 16px;
-    max-width: 70%;
-    padding: 10px;
-    border-radius: 12px;
-    background-color: #f8f8f8;
-    position: relative;
+/* メッセージ全体ラッパー（1件ごと） */
+.message-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 24px;
 }
 
-.message.left {
-    background-color: #e8f0fe;
-    align-self: flex-start;
+.message-wrapper.right {
+    align-items: flex-end;
 }
 
-.message.right {
-    background-color: #dcf8c6;
-    align-self: flex-end;
-    margin-left: auto;
-}
-
+/* ユーザー情報（画像＋名前） */
 .message-user-info {
     display: flex;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .chat-profile-image {
@@ -140,13 +155,64 @@
     font-size: 0.9rem;
 }
 
+/* メッセージ本体 */
+.message {
+    max-width: 70%;
+    padding: 4px 20px;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    position: relative;
+}
+
+.message.left {
+    background-color: #c9c9c9;
+    align-self: flex-start;
+}
+
+.message.right {
+    background-color: #c9c9c9;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+/* 編集・削除ボタン */
+.message-actions {
+    margin-top: 4px;
+}
+
+.message-actions button,
+.message-actions a {
+    margin-right: 8px;
+    font-size: 0.8rem;
+    color: #333;
+    background: none;
+    /* 背景なし */
+    border: none;
+    /* 枠なし */
+    border-radius: 0;
+    /* 角丸なし */
+    cursor: pointer;
+    text-decoration: none;
+    /* アンダーラインを消す */
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+    /* ← 文字に影をつける */
+    padding: 0;
+    /* ボタン風の余白をなくす */
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.message-actions button:hover,
+.message-actions a:hover {
+    color: #000;
+    text-decoration: none;
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+}
+
 /* メッセージ送信フォーム */
 .chat-form {
     display: flex;
     align-items: center;
-    gap: 10px;
     margin-top: 10px;
-    border-top: 1px solid #ccc;
     padding-top: 10px;
 }
 
@@ -156,20 +222,28 @@
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #ccc;
-    font-size: 1rem;
+    font-size: 1.2rem;
+    height: 40px;
+    margin-right: 1rem;
 }
 
-.chat-form button {
-    padding: 8px 16px;
-    border: none;
-    background-color: #4caf50;
-    color: white;
+.btn-outline-secondary {
+    border: 2px solid #fb8080;
     border-radius: 6px;
+    font-weight: bold;
+    color: #fb8080;
+    background-color: #ffffff !important;
+}
+
+.chat-submit-btn {
+    border: none;
+    background: none;
+    padding: 0;
     cursor: pointer;
 }
 
-.chat-form button:hover {
-    background-color: #45a049;
+.chat-submit-btn img {
+    height: 40px;
 }
 
 .chat-form label.btn {
@@ -216,12 +290,12 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: #FFFACD;
+    border: 1px solid #000000;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-    width: 300px;
+    width: 500px;
 }
 
 .modal-overlay {
@@ -229,4 +303,64 @@
     inset: 0;
     background-color: rgba(0, 0, 0, 0.4);
     z-index: 900;
+}
+
+.modaltitle {
+    font-size: 2rem;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #000000;
+}
+
+.comment {
+    color: #989797;
+}
+
+
+.star-rating {
+    direction: rtl;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.star-rating input[type="radio"] {
+    display: none;
+}
+
+.star-rating label {
+    font-size: 4rem;
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star-rating input[type="radio"]:checked~label {
+    color: #FFD700;
+}
+
+.star-rating label:hover,
+.star-rating label:hover~label {
+    color: #FFD700;
+}
+
+.rating-submit {
+    color: #ffffff;
+    background-color: #fb8080;
+    border: 1px solid #fb8080;
+    border-radius: 4px;
+}
+
+.submit-area {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid #000;
+    /* 線の色 */
+    margin: 20px 0;
+    width: 100%;
 }

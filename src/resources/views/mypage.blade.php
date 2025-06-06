@@ -33,6 +33,7 @@
             @if(isset($profile))
                 <img src="{{ asset('storage/' . $profile->profile_image) }}" width="150" alt="プロフィール画像">
                 <div class="profile-info">
+                    <div class="profile-details">
                     <p class="name">{{ $profile->name }}</p>
                     <p>
                         @if (!is_null($user->averageRating()))
@@ -48,6 +49,7 @@
                         @else
                         @endif
                     </p>
+                    </div>
                     <a href="{{ route('mypage.profile') }}" class="btn">プロフィールを編集</a>
                 </div>
             @else
@@ -57,7 +59,7 @@
         <div class="tabs">
             <a href="{{ route('mypage', ['tab' => 'selling']) }}" class="tab-link {{ $tab === 'selling' ? 'active' : '' }}">出品した商品</a>
             <a href="{{ route('mypage', ['tab' => 'purchased']) }}" class="tab-link tab-link-right" id="purchased-tab">購入した商品</a>
-            <a href="{{ route('mypage', ['tab' => 'in_transaction']) }}" class="tab-link {{ $tab === 'in_transaction' ? 'active' : '' }}">
+            <a href="{{ route('mypage', ['tab' => 'in_transaction']) }}" class="tab-link tab-link-right {{ $tab === 'in_transaction' ? 'active' : '' }}">
                 取引中の商品
                 @if ($unreadMessageCount > 0)
                     <span class="badge">{{ $unreadMessageCount }}</span>
@@ -110,16 +112,18 @@
                                 {{-- 未読メッセージバッジ --}}
                                 @if($item->unread_count > 0)
                                     <span style="
-                                        position: absolute;
-                                        top: 0px;
-                                        right: 0px;
-                                        background: red;
-                                        color: white;
-                                        border-radius: 50%;
-                                        padding: 2px 6px;
-                                        font-size: 12px;
-                                        line-height: 1;
-                                    ">
+                                            position: absolute;
+                                            top: 5px;
+                                            left: 5px;
+                                            width: 20px;
+                                            height: 20px;
+                                            background: red;
+                                            color: white;
+                                            border-radius: 50%;
+                                            font-size: 12px;
+                                            line-height: 20px;
+                                            text-align: center;
+                                        ">
                                         {{ $item->unread_count }}
                                     </span>
                                 @endif

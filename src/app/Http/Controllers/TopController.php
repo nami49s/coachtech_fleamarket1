@@ -23,6 +23,7 @@ class TopController extends Controller
             if ($user) {
                 $itemQuery->where('user_id', '!=', $user->id);
             }
+            $itemQuery->where('status', '!=', 'in_transaction');
             if (!empty($query)) {
                 $itemQuery->where(function ($q) use ($query) {
                     $q->where('name', 'LIKE', "%{$query}%")
@@ -32,6 +33,7 @@ class TopController extends Controller
             $items = $itemQuery->get();
         } elseif ($tab === 'mylist' && $user) {
             $items = $user->likedItems()
+            ->where('status', '!=', 'in_transaction')
             ->where(function ($q) use ($query) {
                 if (!empty($query)) {
                     $q->where('name', 'LIKE', "%{$query}%")
