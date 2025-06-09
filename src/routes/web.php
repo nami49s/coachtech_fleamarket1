@@ -81,6 +81,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/chat-message/{chatMessage}', [ChatController::class, 'destroy'])->name('chat.destroy');
 
     Route::post('/items/{item}/ratings', [UserRatingController::class, 'store'])->name('ratings.store');
+
+    Route::post('/purchase/payment', [PurchaseController::class, 'updatePaymentMethod'])->name('purchase.payment');
+    Route::post('/checkout', [StripeController::class, 'checkout'])->name('checkout');
 });
 
 // ログアウト

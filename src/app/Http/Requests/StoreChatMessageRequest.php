@@ -19,9 +19,9 @@ class StoreChatMessageRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'message' => 'required|string|max:400',
@@ -29,12 +29,19 @@ class StoreChatMessageRequest extends FormRequest
         ];
     }
 
-    public function messages(): array
+    /**
+     * Get custom error messages for validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages()
     {
         return [
             'message.required' => '本文を入力してください',
             'message.max' => '本文は400文字以内で入力してください',
+            'image.image' => '「.png」または「.jpeg」形式でアップロードしてください',
             'image.mimes' => '「.png」または「.jpeg」形式でアップロードしてください',
+            'image.max' => '画像ファイルのサイズは2MB以下にしてください',
         ];
     }
 }

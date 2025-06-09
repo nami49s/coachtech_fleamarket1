@@ -44,7 +44,9 @@ class MyListTest extends TestCase
     /** @test */
     public function 購入済み商品は_SOLD_と表示される()
     {
-        $item = Item::factory()->create();
+        $item = Item::factory()->create([
+            'status' => Item::STATUS_COMPLETED,
+        ]);
 
         Purchase::factory()->create([
             'user_id' => $this->user->id,
@@ -58,7 +60,8 @@ class MyListTest extends TestCase
 
         $response = $this->get(route('top', ['tab' => 'mylist']));
 
-        $response->assertSee('SOLD');
+        $response->assertSee($item->name); // 商品がマイリストに表示されていること
+        $response->assertSee('SOLD');      // SOLD と表示されていること
     }
 
     /** @test */

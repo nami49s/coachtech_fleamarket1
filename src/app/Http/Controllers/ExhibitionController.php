@@ -39,23 +39,29 @@ class ExhibitionController extends Controller
 
     public function index(Request $request)
     {
-        $tab = $request->query('tab', 'recommended');
+        $tab = $request->input('tab', 'recommended');
+        $query = $request->input('query');
+        $user = Auth::user();
 
-        if ($tab === 'recommended') {
-            $items = Item::with('user', 'categories')->get();
-            dd($items);
-        } elseif ($tab === 'mylist') {
-            if (auth()->check()) {
-
-                $items = $user->likedItems()->with('categories')->get();
-            } else {
-
-                return redirect()->route('login')->with('error', 'ログインが必要です');
-            }
+        if ($tab === 'mylist') {
+            $items = $user ? $user->likes()->with('purchases')->latest()->get() : collect();
         } else {
+            $itemsQuery = Item::with('user', 'purchases')
+                ->whereNull('deleted_at');
 
-            $items = collect();
+            // 自分の商品を除外（ログイン時のみ）
+            if ($user) {
+                $itemsQuery->where('user_id', '!=', $user->id);
+            }
+
+            // クエリがある場合は商品名で検索
+            if ($query) {
+                $itemsQuery->where('name', 'like', '%' . $query . '%');
+            }
+
+            $items = $itemsQuery->latest()->get();
         }
+
         return view('top', compact('items', 'tab'));
     }
 

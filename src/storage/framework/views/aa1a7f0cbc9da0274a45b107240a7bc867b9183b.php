@@ -28,6 +28,12 @@
         <?php endif; ?>
     </header>
     <main>
+        <?php if(session('error')): ?>
+            <div class="alert alert-danger">
+                <?php echo e(session('error')); ?>
+
+            </div>
+        <?php endif; ?>
         <div class="tabs">
             <a href="<?php echo e(route('top', ['tab' => 'recommended', 'query' => request()->get('query')])); ?>" class="tab-link <?php echo e($tab === 'recommended' ? 'active' : ''); ?>">おすすめ</a>
             <a href="<?php echo e(route('top', ['tab' => 'mylist', 'query' => request()->get('query')])); ?>" class="tab-link tab-link-right <?php echo e($tab === 'mylist' ? 'active' : ''); ?>">マイリスト</a>

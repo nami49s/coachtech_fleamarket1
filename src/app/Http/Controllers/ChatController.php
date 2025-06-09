@@ -8,9 +8,18 @@ use App\Models\ChatMessage;
 use App\Models\UserRating;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreChatMessageRequest;
+use App\Services\ImageServiceInterface;
 
 class ChatController extends Controller
 {
+    protected $imageService;
+
+    // コンストラクタを追加
+    public function __construct(ImageServiceInterface $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+    
     public function show(Item $item)
     {
         $user = Auth::user();

@@ -19,30 +19,34 @@ class MypageController extends Controller
 
         $tab = $request->query('tab', 'selling');
 
-        $sellingItems = $user->items ?? collect();
+        // 出品した商品
+        $sellingItems = Item::where('user_id', $user->id)->get();
 
+        // 購入した商品（completedステータスのもの）
         $purchasedItems = Item::where('buyer_id', $user->id)
                           ->where('status', 'completed')
                           ->get();
 
+        // 取引中の商品
         $inTransactionItems = Item::where('status', 'in_transaction')
-        ->where(function ($query) use ($user) {
-            $query->where('items.user_id', $user->id)
-                  ->orWhere('items.buyer_id', $user->id);
-        })
-        ->leftJoin('chat_messages', 'items.id', '=', 'chat_messages.item_id')
-        ->select('items.*', DB::raw('MAX(chat_messages.created_at) as latest_message_time'))
-        ->groupBy('items.id')
-        ->orderByDesc('latest_message_time')
-        ->get();
+            ->where(function ($query) use ($user) {
+                $query->where('items.user_id', $user->id)
+                    ->orWhere('items.buyer_id', $user->id);
+            })
+            ->addSelect([
+                'latest_message_time' => ChatMessage::selectRaw('MAX(created_at)')
+                    ->whereColumn('item_id', 'items.id'),
+            ])
+            ->orderByRaw('latest_message_time IS NULL, latest_message_time DESC')
+            ->get();
 
+        // 未読メッセージ数を追加
         foreach ($inTransactionItems as $item) {
             $item->unread_count = ChatMessage::where('item_id', $item->id)
                 ->where('user_id', '!=', $user->id) // 相手からのメッセージ
-                ->where('is_read', 0)
+                ->where('is_read', false)
                 ->count();
         }
-
 
         $unreadMessageCount = ChatMessage::whereIn('item_id', $inTransactionItems->pluck('id'))
             ->where('is_read', false)

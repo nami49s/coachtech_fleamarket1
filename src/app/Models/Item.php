@@ -75,4 +75,9 @@ class Item extends Model
     {
         return $this->ratings()->where('rater_id', $userId)->first();
     }
+
+    public function chatMessages()
+    {
+        return $this->hasMany(ChatMessage::class);
+    }
 }

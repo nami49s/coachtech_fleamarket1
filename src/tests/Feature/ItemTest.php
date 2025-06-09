@@ -3,12 +3,10 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Purchase;
-use Illuminate\Support\Facades\Auth;
 
 class ItemTest extends TestCase
 {
@@ -24,36 +22,48 @@ class ItemTest extends TestCase
     }
 
     /** @test */
-    public function 全商品を取得できる()
+    public function 他人の商品は表示され自分の商品は表示されない()
     {
         $otherUser = User::factory()->create();
-        $items = Item::factory()->count(3)->create([
+        $visibleItems = Item::factory()->count(3)->create([
             'user_id' => $otherUser->id,
+        ]);
+
+        $hiddenItem = Item::factory()->create([
+            'user_id' => $this->user->id,
         ]);
 
         $response = $this->actingAs($this->user)->get(route('top', ['tab' => 'recommended']));
 
-        $response->assertStatus(200);
-        foreach ($items as $item) {
+        foreach ($visibleItems as $item) {
             $response->assertSee($item->name);
         }
+
+        $response->assertDontSee($hiddenItem->name);
     }
 
     /** @test */
-    public function 購入済み商品は_SOLD_と表示される()
+    public function 購入済み商品は_sold_と表示される()
     {
         $itemOwner = User::factory()->create();
+
+        // 商品のステータスを「購入済み」に設定
         $item = Item::factory()->create([
             'user_id' => $itemOwner->id,
+            'status' => Item::STATUS_COMPLETED, // ← 明示的に SOLD 状態に
         ]);
 
+        // このユーザーが購入したことにする
         Purchase::factory()->create([
             'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
 
-        $response = $this->get(route('top', ['tab' => 'recommended']));
+        // 商品一覧ページへアクセス
+        $response = $this->actingAs($this->user)->get(route('top', ['tab' => 'recommended']));
 
+        // 商品名が表示され、「SOLD」と表記されていることを確認
+        $response->assertSee($item->name);
         $response->assertSee('SOLD');
     }
 
@@ -62,9 +72,8 @@ class ItemTest extends TestCase
     {
         $item = Item::factory()->create(['user_id' => $this->user->id]);
 
-        $otherUser = User::factory()->create();
-        $response = $this->actingAs($otherUser)->get(route('top'));
+        $response = $this->actingAs($this->user)->get(route('top', ['tab' => 'recommended']));
 
-        $response->assertSee($item->name);
+        $response->assertDontSee($item->name);
     }
 }
