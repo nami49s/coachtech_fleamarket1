@@ -32,6 +32,15 @@
             <?php endif; ?>
 
             <div class="form-container">
+                <?php if($errors->any()): ?>
+                    <div style="color: red;">
+                        <ul>
+                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><?php echo e($error); ?></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
             <form action="<?php echo e(route('update_address')); ?>" method="POST">
                 <?php echo csrf_field(); ?>
 

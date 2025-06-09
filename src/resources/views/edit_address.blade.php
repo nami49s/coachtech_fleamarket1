@@ -32,6 +32,15 @@
             @endif
 
             <div class="form-container">
+                @if ($errors->any())
+                    <div style="color: red;">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             <form action="{{ route('update_address') }}" method="POST">
                 @csrf
 

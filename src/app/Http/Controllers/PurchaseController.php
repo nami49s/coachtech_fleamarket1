@@ -50,9 +50,20 @@ class PurchaseController extends Controller
             'shipping_building' => $request->building,
         ]);
 
-        $item = Item::find(session('item_id'));
+        $itemId = session('item_id');
+        
+        if (!$itemId) {
+            return redirect()->route('mypage')->with('error', '商品情報が見つかりません');
+        }
+        
+        $item = Item::find($itemId);
+        
+        if (!$item) {
+            return redirect()->route('mypage')->with('error', '商品が見つかりません');
+        }
 
-        return redirect()->route('purchase.show', ['item' => $item->id])->with('success', '配送先を更新しました。');
+        return redirect()->route('purchase.show', ['item' => $item->id])
+            ->with('success', '配送先を更新しました。');
     }
 
     public function store(Request $request, Item $item)
