@@ -22,10 +22,9 @@ class UserRatingTest extends TestCase
         $buyer = User::factory()->create();
         $seller = User::factory()->create();
 
-        // 購入者が評価者、出品者が評価先になるようにセット
         $item = Item::factory()->create([
-            'user_id' => $seller->id,  // 出品者
-            'buyer_id' => $buyer->id,  // 購入者
+            'user_id' => $seller->id,
+            'buyer_id' => $buyer->id,
             'status' => 'in_transaction',
         ]);
 
@@ -44,7 +43,6 @@ class UserRatingTest extends TestCase
             'rating' => 4,
         ]);
 
-        // 購入者が出品者を評価したのでメール送信あり
         Mail::assertSent(TransactionCompletedMail::class);
     }
 
@@ -58,7 +56,6 @@ class UserRatingTest extends TestCase
             'buyer_id' => $rater->id,
         ]);
 
-        // 1回目の評価を作成
         UserRating::factory()->create([
             'rater_id' => $rater->id,
             'ratee_id' => $ratee->id,
@@ -83,7 +80,7 @@ class UserRatingTest extends TestCase
 
         $response = $this->actingAs($rater)->post(route('ratings.store', $item), [
             'ratee_id' => $ratee->id,
-            'rating' => 6, // 1~5以外
+            'rating' => 6,
         ]);
 
         $response->assertSessionHasErrors('rating');
@@ -98,19 +95,17 @@ class UserRatingTest extends TestCase
         $seller = User::factory()->create();
 
         $item = Item::factory()->create([
-            'user_id' => $seller->id,  // 出品者
-            'buyer_id' => $buyer->id,  // 購入者
+            'user_id' => $seller->id,
+            'buyer_id' => $buyer->id,
             'status' => 'in_transaction',
         ]);
 
-        // 1人目の評価：購入者が出品者を評価（メール送信される）
         UserRating::factory()->create([
             'rater_id' => $buyer->id,
             'ratee_id' => $seller->id,
             'item_id' => $item->id,
         ]);
 
-        // 2人目の評価：出品者が購入者を評価（メール送信はなし）
         $response = $this->actingAs($seller)->post(route('ratings.store', $item), [
             'ratee_id' => $buyer->id,
             'rating' => 5,

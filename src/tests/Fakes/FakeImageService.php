@@ -29,7 +29,6 @@ class FakeImageService extends ImageService
         return true;
     }
 
-    // 本番で使われる想定のあるsaveImageがある場合
     public function saveImage(UploadedFile $file, string $directory): string
     {
         return $directory . '/fake_saved_image.jpg';
@@ -37,7 +36,6 @@ class FakeImageService extends ImageService
 
     public function resizeAndSave($image, $path, $width, $height)
     {
-        // ダミーのファイル内容を保存（テスト用）
         Storage::put($path, 'fake image content');
     }
 }

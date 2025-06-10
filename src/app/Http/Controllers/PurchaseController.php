@@ -109,8 +109,8 @@ class PurchaseController extends Controller
             ->first();
 
         if ($purchase) {
-            $purchase->payment_method = $request->payment_method == 'credit-card' 
-                ? 'カード支払い' 
+            $purchase->payment_method = $request->payment_method == 'credit-card'
+                ? 'カード支払い'
                 : 'コンビニ払い';
             $purchase->save();
         }

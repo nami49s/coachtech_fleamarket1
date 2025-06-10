@@ -18,13 +18,10 @@ class ItemFactory extends Factory
 
     public function definition()
     {
-        // 出品者をランダムに取得
         $seller = User::inRandomOrder()->first();
 
-        // 出品者とは別のユーザーを購入者として取得（ただし存在する場合）
         $buyer = User::where('id', '!=', optional($seller)->id)->inRandomOrder()->first();
 
-        // 状態をランダムに設定
         $status = $this->faker->randomElement([
             Item::STATUS_ACTIVE,
             Item::STATUS_IN_TRANSACTION,
@@ -32,7 +29,7 @@ class ItemFactory extends Factory
         ]);
 
         return [
-            'user_id' => $seller->id ?? User::factory(), // 出品者
+            'user_id' => $seller->id ?? User::factory(),
             'buyer_id' => in_array($status, [Item::STATUS_IN_TRANSACTION, Item::STATUS_COMPLETED])
                 ? optional($buyer)->id
                 : null,

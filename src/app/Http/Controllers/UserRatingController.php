@@ -21,7 +21,6 @@ class UserRatingController extends Controller
         $rater = auth()->user();
         $ratee = $request->ratee_id;
 
-        // 二重評価を防ぐ
         $exists = UserRating::where([
             ['rater_id', $rater->id],
             ['ratee_id', $ratee],
@@ -32,7 +31,6 @@ class UserRatingController extends Controller
             return back()->with('error', 'すでに評価済みです');
         }
 
-        // 評価保存
         UserRating::create([
             'rater_id' => $rater->id,
             'ratee_id' => $ratee,
@@ -40,7 +38,6 @@ class UserRatingController extends Controller
             'rating' => $request->rating,
         ]);
 
-        // ★ 出品者・購入者双方の評価が完了していたら status を 'completed' に
         $ratingCount = UserRating::where('item_id', $item->id)->count();
 
         if ($ratingCount >= 2) {

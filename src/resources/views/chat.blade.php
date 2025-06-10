@@ -56,9 +56,7 @@
 
 
             @if(auth()->id() === $item->buyer_id && !$item->ratingFrom(auth()->id()))
-            <!-- 取引完了ボタンを押すと評価モーダル -->
-            <button class="btn-complete"
- id="completeBtn">取引を完了する</button>
+            <button class="btn-complete"id="completeBtn">取引を完了する</button>
 
             <div id="ratingModalBuyer" class="modal hidden">
                 <p class="modaltitle">取引が完了しました。</p>
@@ -88,7 +86,6 @@
         @endif
 
         @if(auth()->id() === $item->user_id && $item->ratingFrom($item->buyer_id) && !$item->ratingFrom(auth()->id()))
-            <!-- 出品者への評価モーダル自動表示 -->
             <div id="ratingModalSeller" class="modal">
                 <p class="modaltitle">取引が完了しました。</p>
                 <p class="comment">今回の取引相手はどうでしたか？</p>
@@ -109,7 +106,6 @@
                 </form>
             </div>
             <script>
-                // ページ読み込み時にモーダル表示
                 window.onload = () => {
                     document.getElementById('ratingModalSeller').classList.remove('hidden');
                 };
@@ -143,10 +139,8 @@
                 @endphp
 
                 <div class="message-wrapper {{ $isOwn ? 'right' : 'left' }}">
-                    {{-- プロフィール画像と名前（外に出す） --}}
                     <div class="message-user-info">
                         @if ($isOwn)
-                            {{-- 自分のメッセージ：名前 → 画像 --}}
                             <span class="chat-username">{{ $profile->name ?? '未設定' }}</span>
                             @if ($profile && $profile->profile_image)
                                 <img src="{{ asset('storage/' . $profile->profile_image) }}" alt="プロフィール画像" class="chat-profile-image"style="margin-left: 8px; margin-right: 0;">
@@ -154,7 +148,6 @@
                                 <img src="{{ asset('images/default-user.png') }}" alt="デフォルト画像" class="chat-profile-image">
                             @endif
                         @else
-                            {{-- 相手のメッセージ：画像 → 名前 --}}
                             @if ($profile && $profile->profile_image)
                                 <img src="{{ asset('storage/' . $profile->profile_image) }}" alt="プロフィール画像" class="chat-profile-image">
                             @else
@@ -164,7 +157,6 @@
                         @endif
                     </div>
 
-                    {{-- メッセージ本文（背景付き） --}}
                     <div class="message {{ $isOwn ? 'right' : 'left' }}">
                         <p>{{ $message->message }}</p>
                         @if ($message->image_path)
@@ -172,7 +164,6 @@
                         @endif
                     </div>
 
-                    {{-- 操作ボタン --}}
                     @if ($isOwn)
                         <div class="message-actions">
                             <form action="{{ route('chat.destroy', $message->id) }}" method="POST" style="display: inline;">
@@ -200,15 +191,12 @@
                     </ul>
                 </div>
             @endif
-            {{-- メッセージ送信フォーム --}}
             <form action="{{ route('chat.store', $item->id) }}" method="POST" class="chat-form" enctype="multipart/form-data" id="chat-form">
                 @csrf
                 <textarea id="message" name="message" rows="2" placeholder="取引メッセージを記入してください">{{ old('message') }}</textarea>
-                {{-- 編集時用 --}}
                 <input type="hidden" name="_method" id="form-method" value="POST">
                 <input type="hidden" name="edit_message_id" id="edit-message-id" value="">
 
-                {{-- 画像添付 --}}
                 <label for="image-upload" class="btn btn-outline-secondary">画像を追加</label>
                 <input type="file" id="image-upload" name="image" accept="image/*" style="display: none;">
                 <span id="file-name" style="margin-left: 10px; font-size: 0.9em; color: #555;"></span>
@@ -245,7 +233,6 @@
         const methodInput = document.getElementById('form-method');
         const editMessageIdInput = document.getElementById('edit-message-id');
 
-        // 下書き復元
         if (!textarea.value) {
             const saved = localStorage.getItem(storageKey);
             if (saved) {
@@ -253,17 +240,14 @@
             }
         }
 
-        // 入力時に下書きを保存
         textarea.addEventListener('input', () => {
             localStorage.setItem(storageKey, textarea.value);
         });
 
-        // 送信時に下書きを削除
         form.addEventListener('submit', () => {
             localStorage.removeItem(storageKey);
         });
 
-        // ファイル選択時のプレビュー
         const fileInput = document.getElementById('image-upload');
         const fileNameDisplay = document.getElementById('file-name');
         const imagePreview = document.getElementById('image-preview');
@@ -290,7 +274,6 @@
             }
         });
 
-        // 編集ボタンをクリックしたときの処理
         const editButtons = document.querySelectorAll('.edit-button');
 
         editButtons.forEach(button => {

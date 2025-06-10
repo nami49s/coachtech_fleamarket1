@@ -23,8 +23,8 @@ class TransactionChatTest extends TestCase
         ]);
 
         $this->actingAs($user)
-             ->get(route('mypage'))
-             ->assertSee($item->name);
+                ->get(route('mypage'))
+                ->assertSee($item->name);
     }
 
     /** @test */
@@ -33,16 +33,15 @@ class TransactionChatTest extends TestCase
         $user = User::factory()->create();
         $item = Item::factory()->create(['user_id' => $user->id, 'status' => Item::STATUS_IN_TRANSACTION]);
 
-        // 相手が送信した未読メッセージを3件作成
         ChatMessage::factory()->count(3)->create([
             'item_id' => $item->id,
-            'user_id' => User::factory()->create()->id, // 別ユーザー
+            'user_id' => User::factory()->create()->id,
             'is_read' => false,
         ]);
 
         $this->actingAs($user)
-             ->get(route('mypage'))
-             ->assertSee('3');
+                ->get(route('mypage'))
+                ->assertSee('3');
     }
 
     /** @test */
@@ -54,9 +53,9 @@ class TransactionChatTest extends TestCase
         $item->save();
 
         $this->actingAs($user)
-             ->get(route('chat.show', ['item' => $item->id]))
-             ->assertStatus(200)
-             ->assertSee($item->name);
+                ->get(route('chat.show', ['item' => $item->id]))
+                ->assertStatus(200)
+                ->assertSee($item->name);
     }
 
     /** @test */
@@ -68,8 +67,8 @@ class TransactionChatTest extends TestCase
         $itemB = Item::factory()->create(['buyer_id' => $user->id, 'status' => Item::STATUS_IN_TRANSACTION]);
 
         $this->actingAs($user)
-             ->get(route('chat.show', ['item' => $itemA->id]))
-             ->assertSee($itemB->name); // サイドバーに別商品も表示されている
+                ->get(route('chat.show', ['item' => $itemA->id]))
+                ->assertSee($itemB->name);
     }
 
     /** @test */
@@ -80,12 +79,11 @@ class TransactionChatTest extends TestCase
         $item1 = Item::factory()->create(['buyer_id' => $user->id, 'status' => Item::STATUS_IN_TRANSACTION]);
         $item2 = Item::factory()->create(['buyer_id' => $user->id, 'status' => Item::STATUS_IN_TRANSACTION]);
 
-        // item2 に新しいメッセージ
         ChatMessage::factory()->create(['item_id' => $item1->id, 'created_at' => now()->subDay()]);
         ChatMessage::factory()->create(['item_id' => $item2->id, 'created_at' => now()]);
 
         $response = $this->actingAs($user)->get(route('mypage'));
-        $response->assertSeeInOrder([$item2->name, $item1->name]); // 新しいメッセージ順
+        $response->assertSeeInOrder([$item2->name, $item1->name]);
     }
 
     /** @test */
@@ -101,7 +99,7 @@ class TransactionChatTest extends TestCase
         ]);
 
         $this->actingAs($user)
-             ->get(route('mypage'))
-             ->assertSee('1');
+                ->get(route('mypage'))
+                ->assertSee('1');
     }
 }

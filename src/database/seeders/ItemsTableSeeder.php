@@ -150,16 +150,13 @@ class ItemsTableSeeder extends Seeder
         }
 
         Item::factory(10)->create()->each(function ($item) use ($categories, $users) {
-            // 出品者をランダムに再設定（念のため）
             $seller = $users->random();
             $item->update([
                 'user_id' => $seller->id,
                 'item_image' => 'item_images/sample.jpg',
             ]);
 
-            // ステータスに応じて購入者を設定
             if (in_array($item->status, [Item::STATUS_IN_TRANSACTION, Item::STATUS_COMPLETED])) {
-                // 出品者以外のユーザーから購入者を選ぶ
                 $buyer = $users->where('id', '!=', $seller->id)->random();
                 $item->update([
                     'buyer_id' => $buyer->id,

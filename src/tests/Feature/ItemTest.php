@@ -47,22 +47,18 @@ class ItemTest extends TestCase
     {
         $itemOwner = User::factory()->create();
 
-        // 商品のステータスを「購入済み」に設定
         $item = Item::factory()->create([
             'user_id' => $itemOwner->id,
-            'status' => Item::STATUS_COMPLETED, // ← 明示的に SOLD 状態に
+            'status' => Item::STATUS_COMPLETED,
         ]);
 
-        // このユーザーが購入したことにする
         Purchase::factory()->create([
             'user_id' => $this->user->id,
             'item_id' => $item->id,
         ]);
 
-        // 商品一覧ページへアクセス
         $response = $this->actingAs($this->user)->get(route('top', ['tab' => 'recommended']));
 
-        // 商品名が表示され、「SOLD」と表記されていることを確認
         $response->assertSee($item->name);
         $response->assertSee('SOLD');
     }

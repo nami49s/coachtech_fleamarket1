@@ -60,8 +60,8 @@ class MyListTest extends TestCase
 
         $response = $this->get(route('top', ['tab' => 'mylist']));
 
-        $response->assertSee($item->name); // 商品がマイリストに表示されていること
-        $response->assertSee('SOLD');      // SOLD と表示されていること
+        $response->assertSee($item->name);
+        $response->assertSee('SOLD');
     }
 
     /** @test */
@@ -88,7 +88,6 @@ class MyListTest extends TestCase
         $item = Item::factory()->create();
         Like::factory()->create(['item_id' => $item->id]);
 
-        // ログアウトして未認証状態にする
         auth()->logout();
 
         $response = $this->get(route('top', ['tab' => 'mylist']));

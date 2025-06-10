@@ -19,22 +19,19 @@ class ChatController extends Controller
     {
         $this->imageService = $imageService;
     }
-    
+
     public function show(Item $item)
     {
         $user = Auth::user();
 
-        // アクセス権をチェック（出品者 or 購入者のみ許可）
         if ($item->user_id !== $user->id && $item->buyer_id !== $user->id) {
             abort(403, 'アクセス権がありません');
         }
 
-        // ログイン中のユーザーが出品者かどうか
         $isSeller = $item->user_id === $user->id;
 
-        // ★ 未読メッセージを既読にする
         ChatMessage::where('item_id', $item->id)
-            ->where('user_id', '!=', $user->id)  // 自分が送ってないメッセージ（=自分が受信者）
+            ->where('user_id', '!=', $user->id) 
             ->where('is_read', 0)
             ->update(['is_read' => 1]);
 
@@ -46,7 +43,7 @@ class ChatController extends Controller
             })
             ->get();
         $messages = ChatMessage::where('item_id', $item->id)
-            ->with('user.profile') // プロフィールも取得（画像・名前用）
+            ->with('user.profile')
             ->orderBy('created_at')
             ->get();
 
@@ -65,8 +62,7 @@ class ChatController extends Controller
             abort(403, '購入者のみが完了できます');
         }
 
-        // 完了処理（例：取引ステータス更新など）
-        $item->status = 'completed'; // 'status' カラムがある場合
+        $item->status = 'completed';
         $item->save();
 
         return redirect()->route('chat.show', ['item' => $item->id])
@@ -77,7 +73,6 @@ class ChatController extends Controller
     {
         $user = Auth::user();
 
-        // アクセス権チェック
         if ($item->user_id !== $user->id && $item->buyer_id !== $user->id) {
             abort(403, 'アクセス権がありません');
         }

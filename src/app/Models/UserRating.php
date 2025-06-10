@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserRating extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'rater_id', 'ratee_id', 'item_id', 'rating',
     ];

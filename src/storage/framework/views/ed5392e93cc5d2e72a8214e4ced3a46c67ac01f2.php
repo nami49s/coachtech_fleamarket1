@@ -106,10 +106,8 @@
                         <?php $__currentLoopData = $inTransactionItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="item-card" style="position: relative; display: inline-block; margin: 10px;">
                             <a href="<?php echo e(route('chat.show', ['item' => $item->id])); ?>" style="display: block; position: relative;">
-                                
                                 <img src="<?php echo e(asset('storage/' . $item->item_image)); ?>" width="100" alt="<?php echo e($item->name); ?>" style="display: block;">
 
-                                
                                 <?php if($item->unread_count > 0): ?>
                                     <span style="
                                             position: absolute;

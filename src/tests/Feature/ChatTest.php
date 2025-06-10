@@ -20,10 +20,8 @@ class ChatTest extends TestCase
     {
         parent::setUp();
 
-        // ImageServiceInterface をFakeImageService にバインド
         $this->app->bind(ImageServiceInterface::class, FakeImageService::class);
 
-        // ストレージもフェイク
         Storage::fake('public');
     }
 
@@ -32,19 +30,18 @@ class ChatTest extends TestCase
     {
         $user = User::factory()->create();
         $item = Item::factory()->create([
-            'user_id' => $user->id // ユーザーがアクセス権を持つように設定
+            'user_id' => $user->id
         ]);
 
-        // GD拡張なしでも動作するように、通常のファイルを作成
         $fakeImage = UploadedFile::fake()->create('chat.jpeg', 100, 'image/jpeg');
 
         $response = $this->actingAs($user)->post(route('chat.store', $item), [
-            'message' => 'これは有効なチャットメッセージです。', // 'body' → 'message'
+            'message' => 'これは有効なチャットメッセージです。',
             'image' => $fakeImage,
         ]);
 
         $response->assertRedirect();
-        $this->assertDatabaseHas('chat_messages', [ // 'chats' → 'chat_messages'
+        $this->assertDatabaseHas('chat_messages', [
             'message' => 'これは有効なチャットメッセージです。',
             'item_id' => $item->id,
             'user_id' => $user->id,
@@ -59,15 +56,14 @@ class ChatTest extends TestCase
             'user_id' => $user->id
         ]);
 
-        // GD拡張なしでも動作するように、通常のファイルを作成
         $fakeImage = UploadedFile::fake()->create('chat.jpeg', 100, 'image/jpeg');
 
         $response = $this->actingAs($user)->post(route('chat.store', $item), [
-            'message' => '', // 'body' → 'message'
+            'message' => '',
             'image' => $fakeImage,
         ]);
 
-        $response->assertSessionHasErrors(['message']); // 'body' → 'message'
+        $response->assertSessionHasErrors(['message']);
         $this->assertEquals('本文を入力してください', session('errors')->first('message'));
     }
 
@@ -79,16 +75,15 @@ class ChatTest extends TestCase
             'user_id' => $user->id
         ]);
 
-        // GD拡張なしでも動作するように、通常のファイルを作成
         $fakeImage = UploadedFile::fake()->create('chat.jpeg', 100, 'image/jpeg');
 
         $tooLong = str_repeat('あ', 401);
         $response = $this->actingAs($user)->post(route('chat.store', $item), [
-            'message' => $tooLong, // 'body' → 'message'
+            'message' => $tooLong,
             'image' => $fakeImage,
         ]);
 
-        $response->assertSessionHasErrors(['message']); // 'body' → 'message'
+        $response->assertSessionHasErrors(['message']);
         $this->assertEquals('本文は400文字以内で入力してください', session('errors')->first('message'));
     }
 
@@ -102,7 +97,7 @@ class ChatTest extends TestCase
 
         $invalidFile = UploadedFile::fake()->create('invalid.exe', 100);
         $response = $this->actingAs($user)->post(route('chat.store', $item), [
-            'message' => 'テスト本文', // 'body' → 'message'
+            'message' => 'テスト本文',
             'image' => $invalidFile,
         ]);
 
@@ -122,7 +117,7 @@ class ChatTest extends TestCase
 
         $response = $this->actingAs($user)->withSession([
             '_old_input' => [
-                'message' => $message, // 'body' → 'message'
+                'message' => $message,
             ],
         ])->get(route('chat.show', $item));
 
@@ -136,7 +131,7 @@ class ChatTest extends TestCase
         $otherUser = User::factory()->create();
         $item = Item::factory()->create([
             'user_id' => $otherUser->id,
-            'buyer_id' => null // このユーザーは購入者でもない
+            'buyer_id' => null
         ]);
 
         $response = $this->actingAs($user)->post(route('chat.store', $item), [

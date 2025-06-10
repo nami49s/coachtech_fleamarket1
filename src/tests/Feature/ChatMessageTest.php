@@ -24,7 +24,7 @@ class ChatMessageTest extends TestCase
             ->put(route('chat.update', $message), [
                 'message' => '編集されたメッセージ',
             ])
-            ->assertRedirect(); // または assertStatus(200) など
+            ->assertRedirect();
 
         $this->assertDatabaseHas('chat_messages', [
             'id' => $message->id,
@@ -63,7 +63,7 @@ class ChatMessageTest extends TestCase
             ->put(route('chat.update', $message), [
                 'message' => '不正な編集',
             ])
-            ->assertForbidden(); // ポリシーで403を返す想定
+            ->assertForbidden();
     }
 
     /** @test */
@@ -77,7 +77,7 @@ class ChatMessageTest extends TestCase
 
         $this->actingAs($user)
             ->delete(route('chat.destroy', $message))
-            ->assertForbidden(); // ポリシーで403を返す想定
+            ->assertForbidden();
     }
 
     /** @test */
@@ -94,7 +94,6 @@ class ChatMessageTest extends TestCase
             ])
             ->assertSessionHasErrors('message');
 
-        // 内容が変わっていないことも確認
         $this->assertDatabaseHas('chat_messages', [
             'id' => $message->id,
             'message' => $message->message,

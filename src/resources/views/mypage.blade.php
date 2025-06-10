@@ -106,10 +106,8 @@
                         @foreach($inTransactionItems as $item)
                         <div class="item-card" style="position: relative; display: inline-block; margin: 10px;">
                             <a href="{{ route('chat.show', ['item' => $item->id]) }}" style="display: block; position: relative;">
-                                {{-- 商品画像 --}}
                                 <img src="{{ asset('storage/' . $item->item_image) }}" width="100" alt="{{ $item->name }}" style="display: block;">
 
-                                {{-- 未読メッセージバッジ --}}
                                 @if($item->unread_count > 0)
                                     <span style="
                                             position: absolute;
